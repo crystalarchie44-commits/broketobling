@@ -879,6 +879,14 @@ body.has-tabs .wrap{padding-bottom:120px!important}
 .crystal-portrait figcaption{font-family:var(--display);font-style:italic;font-size:15px;letter-spacing:.06em;color:var(--gold)}
 @keyframes cpIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.crystal-portrait{animation:none}}
+
+/* Called to Create waitlist */
+.invite .ctc-pill{justify-self:center;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#120E08;background:linear-gradient(135deg,#F3DFAE,#C9A15E);padding:6px 12px;border-radius:999px;font-weight:600}
+.invite .ctc-title{font-size:38px!important;letter-spacing:.01em;background:linear-gradient(180deg,#FFF8E6,#D9BC86);-webkit-background-clip:text;background-clip:text;color:transparent!important;margin-top:-6px!important}
+.invite .ctc-lede{font-family:var(--display);font-style:italic;font-size:19px;line-height:1.4;color:#F4EBDD!important;max-width:24em}
+.ctc-list{list-style:none;margin:2px 0 4px;padding:0;display:grid;gap:10px;text-align:left;max-width:340px}
+.ctc-list li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.45;color:var(--mist,#cfc6b8)}
+.ctc-list li svg,.ctc-list li img{flex:0 0 16px;width:16px;height:16px;margin-top:2px}
 </style>
 </head>
 <body>
@@ -1268,24 +1276,25 @@ function personalize(){
   app.innerHTML='<section class="screen">'+
    '<button class="back" type="button" data-go="home">← Cover</button>'+
    '<div class="head center"><div class="p-gem lit">'+gem("round")+'</div><span class="eyebrow">'+(first?'Before you step in':'Your preferences')+'</span>'+
-   '<h2>Make this guide yours</h2><p>Three quick questions, about thirty seconds. Your answers stay on this phone, and you can change them anytime under <b>You</b>.</p></div>'+
-   (first?'<ol class="howto"><li><b>Add your first name</b><span>Every page will speak to you by name.</span></li><li><b>Choose where it hurts most</b><span>We will open that section for you first.</span></li><li><b>Pick your reading size</b><span>Larger text is easier on a phone.</span></li></ol>':'')+
+   '<h2>Make this guide yours</h2><p>'+(first?'A few quick questions, about a minute. Every one is optional, and you can change them anytime under <b>You</b>.':'Your answers stay on this phone, and you can change them anytime under <b>You</b>.')+'</p></div>'+
+   
    '<form class="page prefs" id="prefsForm" novalidate>'+
      '<div class="q"><label class="ql" for="pName"><span class="qn">1</span>What name should these declarations be spoken over?</label>'+
-       '<p class="qh">Just your first name. It is used only to personalize these pages and never leaves this phone.</p>'+
+       '<p class="qh">Just your first name. Every page will speak to you by name.</p>'+
        '<input id="pName" class="txt" type="text" maxlength="30" placeholder="Your first name" autocomplete="given-name" value="'+(state.name?esc(state.name):'')+'"></div>'+
      '<div class="q"><span class="ql" id="focusLbl"><span class="qn">2</span>What are you rebuilding most right now?</span>'+
        '<p class="qh">Tap one area. Tap it again to clear it. You can still visit every section.</p>'+
        '<div class="chips" role="radiogroup" aria-labelledby="focusLbl">'+SECTIONS.map(function(x){
          return '<button type="button" class="chip" role="radio" data-focus="'+x.id+'" aria-checked="'+(state.focus===x.id)+'">'+gem(x.cut)+'<span>'+esc(x.name)+'</span></button>';
        }).join("")+'</div></div>'+
-     '<div class="q"><span class="ql" id="sizeLbl"><span class="qn">3</span>How would you like to read?</span>'+
+     (first?researchQs(3):'')+
+     '<div class="q"><span class="ql" id="sizeLbl"><span class="qn">'+(first?7:3)+'</span>How would you like to read?</span>'+
        '<p class="qh">You will see the change right away.</p>'+
        '<div class="seg" role="radiogroup" aria-labelledby="sizeLbl">'+
          '<button type="button" role="radio" data-size="normal" aria-checked="'+(state.size!=="large")+'"><b class="aa">Aa</b>Standard text</button>'+
          '<button type="button" role="radio" data-size="large" aria-checked="'+(state.size==="large")+'"><b class="aa big-aa">Aa</b>Larger text</button>'+
        '</div></div>'+
-     '<div class="prefs-foot"><button class="btn" type="submit">'+(first?'Save and step in':'Save preferences')+'</button>'+
+     '<div class="prefs-foot"><button class="btn" type="submit">'+(first?'Save and read Crystal’s letter':'Save preferences')+'</button>'+
        (first?'<button class="skip" type="button" id="skipPrefs">Skip for now</button>':'')+'</div>'+
    '</form>'+
   '</section>';
@@ -1299,15 +1308,21 @@ function personalize(){
     app.querySelectorAll("[data-size]").forEach(function(o){o.setAttribute("aria-checked",String(o.getAttribute("data-size")===size));});
     state.size=size; applySize();
   });});
+  if(first) wireResearchChips();
   document.getElementById("prefsForm").addEventListener("submit",function(e){
     e.preventDefault();
+    var res=null;
+    if(first){ res=readResearch(); if(!res) return; }
     setName(document.getElementById("pName").value);
-    state.focus=focus; state.size=size; state.prefs=true; persist(); applySize();
+    state.focus=focus; state.size=size; state.prefs=true;
+    if(res){ state.research=res; }
+    persist(); applySize();
+    if(res) sendResearch(res);
     toast(state.name?"Saved, "+state.name:"Preferences saved","round");
-    go(first?"research":"choose");
+    go(first?"letter":"choose");
   });
   var sk=document.getElementById("skipPrefs");
-  if(sk) sk.addEventListener("click",function(){state.prefs=true; persist(); go("research");});
+  if(sk) sk.addEventListener("click",function(){state.prefs=true; persist(); go("letter");});
   if(!first){ var lk=document.createElement("div"); lk.className="prefs-links"; lk.innerHTML='<button class="btn ghost" type="button" data-go="research">Help shape what comes next</button><button class="btn ghost" type="button" data-go="install">How to add this to your home screen</button>'; app.querySelector(".screen").appendChild(lk); }
 }
 /* ---------- Research step (optional) ---------- */
@@ -1322,6 +1337,28 @@ var R_SKILLS=["Using AI to save time, work smarter, or create income","Building 
 var R_LEARN=["Short videos I can watch anytime","Live sessions with other women","Step-by-step guides and templates","Accountability and prayer partners"];
 function sendResearch(r){
   try{ sbInsert({kind:"research",name:state.name||null,email:r.email||null,focus:state.focus?((byId(state.focus)||{}).name||null):null,season:r.season||null,skills:r.skills,learn:r.learn}).catch(function(){}); }catch(e){}
+}
+function rChips(list,group,multi,sel){ return '<div class="chips rchips" role="'+(multi?'group':'radiogroup')+'" aria-labelledby="'+group+'Lbl">'+list.map(function(t,i){ var on=multi?sel.indexOf(t)>-1:sel===t;
+    return '<button type="button" class="chip rchip" '+(multi?'aria-pressed':'role="radio" aria-checked')+'="'+on+'" data-g="'+group+'" data-v="'+i+'"><span>'+esc(t)+'</span></button>'; }).join("")+'</div>'; }
+function researchQs(n){ var r=state.research||{season:"",skills:[],learn:[],email:""};
+  return '<div class="q"><label class="ql" for="rEmail"><span class="qn">'+n+'</span>Your email</label><p class="qh">Optional. Be first to hear about new declarations and what is coming next.</p>'+
+       '<input id="rEmail" class="txt" type="email" placeholder="Your email" autocomplete="email" value="'+esc(r.email||"")+'"><span class="r-err" id="rErr" role="alert"></span></div>'+
+     '<div class="q"><span class="ql" id="seasonLbl"><span class="qn">'+(n+1)+'</span>What season are you in right now?</span><p class="qh">Choose the one that fits best.</p>'+rChips(R_SEASON,"season",false,r.season)+'</div>'+
+     '<div class="q"><span class="ql" id="skillsLbl"><span class="qn">'+(n+2)+'</span>God often opens new doors through new skills. Which would you love to learn?</span><p class="qh">Choose any that stir something in you.</p>'+rChips(R_SKILLS,"skills",true,r.skills)+'</div>'+
+     '<div class="q"><span class="ql" id="learnLbl"><span class="qn">'+(n+3)+'</span>If we made something just for you, how would you want to learn?</span><p class="qh">Choose any.</p>'+rChips(R_LEARN,"learn",true,r.learn)+'</div>'; }
+function wireResearchChips(){
+  app.querySelectorAll(".rchip").forEach(function(b){ b.addEventListener("click",function(){
+    var g=b.getAttribute("data-g");
+    if(g==="season"){ app.querySelectorAll('.rchip[data-g="season"]').forEach(function(o){ o.setAttribute("aria-checked",String(o===b&&o.getAttribute("aria-checked")!=="true")); }); }
+    else { b.setAttribute("aria-pressed",String(b.getAttribute("aria-pressed")!=="true")); }
+  }); });
+  var em=document.getElementById("rEmail"); if(em) em.addEventListener("input",function(){document.getElementById("rErr").textContent="";});
+}
+function readResearch(){
+  var em=document.getElementById("rEmail"), email=em?em.value.trim():"";
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ document.getElementById("rErr").textContent="Check that email address, or leave it blank."; em.focus(); return null; }
+  var pick=function(g,list){ return [].filter.call(app.querySelectorAll('.rchip[data-g="'+g+'"]'),function(o){return o.getAttribute(g==="season"?"aria-checked":"aria-pressed")==="true";}).map(function(o){return list[+o.getAttribute("data-v")];}); };
+  return {season:pick("season",R_SEASON)[0]||"",skills:pick("skills",R_SKILLS),learn:pick("learn",R_LEARN),email:email,at:Date.now()};
 }
 function research(){
   var first=!state.research, r=state.research||{season:"",skills:[],learn:[],email:""};
@@ -1352,7 +1389,7 @@ function research(){
     var res={season:pick("season",R_SEASON)[0]||"",skills:pick("skills",R_SKILLS),learn:pick("learn",R_LEARN),email:email,at:Date.now()};
     state.research=res; persist(); sendResearch(res);
     toast(state.name?"Thank you, "+state.name:"Thank you","round");
-    go(first?"letter":"personalize");
+    go("personalize");
   });
   var sk=document.getElementById("skipRes"); if(sk) sk.addEventListener("click",function(){ go("letter"); });
 }
@@ -1628,12 +1665,14 @@ function finale(){
     '<div class="divider lit" aria-hidden="true">'+gem("princess")+'</div>'+
     '<div class="begin-txt"><h3>This is only the beginning</h3><p>If these declarations met you in a broken place, return to them whenever you need to remember what is true. Speak them slowly. Write the ones you need most. Share them with a woman who is rebuilding. Most importantly, keep taking the next faithful step.</p></div>'+
     '<form class="invite" id="invite" novalidate>'+
-      '<h3>Join the Broke to B.L.I.N.G. email list</h3>'+
-      '<p>New declarations, prayers, rebuilding encouragement, and first access when The Rebuild Room opens.</p>'+
-      '<div class="field"><input id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address"><button class="btn" type="submit">Join</button></div>'+
+      '<span class="ctc-pill">Waitlist now open</span>'+
+      '<span class="eyebrow">Coming soon</span>'+
+      '<h3 class="ctc-title">Called to Create</h3>'+
+      '<p class="ctc-lede">How I grew my Instagram to 600K followers without ads, through faith-based content.</p>'+
+      '<ul class="ctc-list"><li>'+gem("round")+'<span>Share your faith and your story with confidence</span></li><li>'+gem("round")+'<span>Grow an audience with integrity, no paid ads</span></li><li>'+gem("round")+'<span>Create content that points people back to Him</span></li></ul>'+
+      '<div class="field"><input id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address"><button class="btn" type="submit">Join the waitlist</button></div>'+
       '<span class="form-msg" id="formMsg"></span>'+
     '</form>'+
-    '<div class="room">'+gem("cushion",'class="lit"')+'<div><b>The Rebuild Room <span class="pill">Coming soon</span></b><span>A Broke to B.L.I.N.G. community. You do not have to rebuild alone.</span></div></div>'+
     '<div class="contrib"><span class="label">Optional contribution</span><p>This resource is yours free. If it encouraged you and you feel led to support this work, you are welcome to contribute any amount. Your support helps make more faith-building resources available, but giving is never required to download or use this guide.</p><a class="btn ghost contrib-btn" href="https://crystalarcher.gumroad.com/l/broketobling" target="_blank" rel="noopener">Contribute any amount</a></div>'+
     '<div class="remember"><span class="eyebrow">Remember</span><p>'+(state.name?'<span class="who">'+nm()+'</span>, ':'')+(state.name?'God':'God')+' never called you to stay broken. He called you to believe again, rebuild with faith, and let the whole story give Him glory.</p></div>'+
     '<button class="btn ghost" type="button" data-go="choose">Return to the declarations</button>'+
@@ -1644,8 +1683,8 @@ function finale(){
     var em=document.getElementById("email"), msg=document.getElementById("formMsg"), v=em.value.trim(), btn=this.querySelector("button[type=submit]");
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ msg.textContent="Enter a valid email address to join."; em.focus(); return; }
     btn.disabled=true; msg.textContent="Joining…";
-    sbInsert({kind:"signup",name:state.name||null,email:v,focus:state.focus?((byId(state.focus)||{}).name||null):null})
-      .then(function(){ msg.textContent="You’re on the list"+(state.name?", "+state.name:"")+". Watch your inbox for encouragement."; em.value=""; toast("Welcome to the list","round"); })
+    sbInsert({kind:"waitlist",name:state.name||null,email:v,focus:state.focus?((byId(state.focus)||{}).name||null):null})
+      .then(function(){ msg.textContent="You’re on the Called to Create waitlist"+(state.name?", "+state.name:"")+". Watch your inbox."; em.value=""; toast("You’re on the waitlist","round"); })
       .catch(function(){ msg.textContent="That didn’t go through. Check your connection and try again."; btn.disabled=false; });
   });
 }
@@ -1680,7 +1719,7 @@ function celebrate(){
     '<h2>'+(state.name?'Look at you, <span class="who">'+nm()+'</span>':'Look at what God is doing')+'</h2>'+
     '<p>You spoke God’s Word over every broken place. That is not small. That is faith before the evidence. Keep coming back to these words, and keep taking the next faithful step. God is not finished with you.</p>'+
     '<span class="cel-sig">Crystal</span>'+
-    '<div class="cel-btns"><button class="btn" type="button" data-cel="card">Make my declaration card</button><button class="btn ghost" type="button" data-cel="finale">Join the Rebuild Room list</button><button class="skip" type="button" data-cel="close">Close</button></div></div>';
+    '<div class="cel-btns"><button class="btn" type="button" data-cel="card">Make my declaration card</button><button class="btn ghost" type="button" data-cel="finale">Join the Called to Create waitlist</button><button class="skip" type="button" data-cel="close">Close</button></div></div>';
   document.body.appendChild(o);
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ o.classList.add("go"); }); });
   try{navigator.vibrate&&navigator.vibrate([30,60,30,60,60]);}catch(e){}

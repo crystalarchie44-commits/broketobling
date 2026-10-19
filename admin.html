@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Broke to B.L.I.N.G. Admin</title>
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070605;--panel:#100E0C;--line:rgba(217,188,134,.22);--gold:#D9BC86;--gold2:#F3DFAE;--ivory:#F7F1E6;--mist:#B9AFA0;--ok:#9FD3A8;--err:#F2A7A0}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ivory);font:15px/1.5 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--gold)}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+header img{height:44px;width:auto}
+.eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;margin:0}
+h1{font-size:30px}
+.btn{appearance:none;border:0;border-radius:999px;padding:11px 20px;font:600 13px Inter,sans-serif;letter-spacing:.04em;cursor:pointer;background:linear-gradient(135deg,var(--gold2),#B98A45);color:#140F08}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+.login{max-width:420px;margin:8vh auto 0;text-align:center;display:grid;gap:14px}
+.login input{width:100%;padding:13px 16px;border-radius:10px;border:1px solid var(--line);background:#0A0908;color:var(--ivory);font:15px Inter,sans-serif}
+.login input:focus,.tools input:focus,.tools select:focus{outline:2px solid rgba(217,188,134,.5);outline-offset:1px}
+.msg{min-height:20px;font-size:13.5px;color:var(--mist)}
+.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:600;line-height:1.1;color:var(--gold2)}
+.stat span{font-size:12px;color:var(--mist);letter-spacing:.04em}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{appearance:none;border:1px solid var(--line);background:transparent;color:var(--mist);border-radius:999px;padding:8px 14px;font:500 13px Inter,sans-serif;cursor:pointer}
+.tab[aria-pressed="true"]{background:rgba(217,188,134,.14);color:var(--gold2);border-color:rgba(217,188,134,.5)}
+.tools input,.tools select{flex:1 1 200px;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:#0A0908;color:var(--ivory);font:14px Inter,sans-serif}
+.tools .right{margin-left:auto;display:flex;gap:8px}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:12px;border-bottom:1px solid rgba(217,188,134,.1);vertical-align:top}
+.tbl tr:hover td{background:rgba(217,188,134,.04)}
+.kind{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.k-waitlist{background:rgba(243,223,174,.16);color:var(--gold2)}
+.k-research{background:rgba(159,211,168,.12);color:var(--ok)}
+.k-signup{background:rgba(185,175,160,.14);color:var(--mist)}
+.muted{color:var(--mist)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tags i{font-style:normal;font-size:11.5px;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.05);color:#DCD3C4}
+.empty{padding:40px;text-align:center;color:var(--mist)}
+.tablewrap{overflow-x:auto}
+@media (max-width:760px){
+  .tbl thead{display:none}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl tr{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:6px 4px;background:var(--panel)}
+  .tbl td{border:0;padding:6px 12px}
+  .tbl td[data-l]::before{content:attr(data-l);display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+  .tools .right{margin-left:0;width:100%}
+  .tools .right .btn{flex:1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="logo.png" alt="Broke to B.L.I.N.G.">
+    <div id="who" class="muted" style="font-size:13px;text-align:right"></div>
+  </header>
+
+  <section id="loginView" class="card login" hidden>
+    <span class="eyebrow">Admin</span>
+    <h1>Sign in</h1>
+    <p class="muted" style="margin:0">Enter your admin email. We’ll send you a secure sign-in link, no password needed.</p>
+    <form id="loginForm" style="display:grid;gap:12px">
+      <input id="loginEmail" type="email" placeholder="you@email.com" autocomplete="email" required>
+      <button class="btn" type="submit">Email me a sign-in link</button>
+    </form>
+    <div id="loginMsg" class="msg" role="status"></div>
+  </section>
+
+  <section id="deniedView" class="card login" hidden>
+    <span class="eyebrow">Admin</span>
+    <h1>No access yet</h1>
+    <p class="muted" style="margin:0">You’re signed in, but this email isn’t on the admin list.</p>
+    <button class="btn ghost" type="button" data-signout>Sign out</button>
+  </section>
+
+  <section id="dataView" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+      <div><span class="eyebrow">Admin</span><h1>Sign-ups and responses</h1></div>
+      <button class="btn ghost" type="button" data-signout>Sign out</button>
+    </div>
+    <div class="stats">
+      <div class="card stat"><b id="sTotal">0</b><span>Total entries</span></div>
+      <div class="card stat"><b id="sWait">0</b><span>Called to Create waitlist</span></div>
+      <div class="card stat"><b id="sInfo">0</b><span>Profile answers</span></div>
+      <div class="card stat"><b id="sEmails">0</b><span>Unique emails</span></div>
+    </div>
+    <div class="tools">
+      <div class="tabs" role="group" aria-label="Filter by type">
+        <button class="tab" type="button" data-k="all" aria-pressed="true">All</button>
+        <button class="tab" type="button" data-k="waitlist" aria-pressed="false">Waitlist</button>
+        <button class="tab" type="button" data-k="research" aria-pressed="false">Profile answers</button>
+        <button class="tab" type="button" data-k="signup" aria-pressed="false">Older email list</button>
+      </div>
+      <input id="q" type="search" placeholder="Search name, email, focus…" aria-label="Search">
+      <div class="right">
+        <button class="btn ghost" type="button" id="refresh">Refresh</button>
+        <button class="btn" type="button" id="csv">Download CSV</button>
+      </div>
+    </div>
+    <div class="card" style="padding:6px 8px">
+      <div class="tablewrap">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Email</th><th>Rebuilding</th><th>Season</th><th>Wants to learn</th><th>Format</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div id="empty" class="empty" hidden>Nothing here yet.</div>
+    </div>
+    <div id="dataMsg" class="msg" style="margin-top:10px"></div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var SB_URL="https://ukneifazkwdjljswxoab.supabase.co", SB_KEY="sb_publishable_45MaLGTuGjW493HuzgwQ5w_YFossgrZ";
+  var sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true,flowType:"implicit"}});
+  var $=function(id){return document.getElementById(id);};
+  var all=[], kind="all";
+  var LABEL={waitlist:"Waitlist",research:"Profile",signup:"Email list"};
+  function show(v){ ["loginView","deniedView","dataView"].forEach(function(id){ $(id).hidden=(id!==v); }); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function fmt(t){ try{ return new Date(t).toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"}); }catch(e){ return t; } }
+  function tags(a){ return (a&&a.length)?'<div class="tags">'+a.map(function(x){return '<i>'+esc(x)+'</i>';}).join("")+'</div>':'<span class="muted">—</span>'; }
+  function cell(l,v){ return '<td data-l="'+l+'">'+v+'</td>'; }
+  function filtered(){
+    var q=$("q").value.trim().toLowerCase();
+    return all.filter(function(r){
+      if(kind!=="all"&&r.kind!==kind) return false;
+      if(!q) return true;
+      return [r.name,r.email,r.focus,r.season,(r.skills||[]).join(" "),(r.learn||[]).join(" ")].join(" ").toLowerCase().indexOf(q)>-1;
+    });
+  }
+  function render(){
+    var list=filtered();
+    $("rows").innerHTML=list.map(function(r){
+      return '<tr>'+cell("Date",'<span class="muted">'+esc(fmt(r.created_at))+'</span>')+
+        cell("Type",'<span class="kind k-'+esc(r.kind)+'">'+esc(LABEL[r.kind]||r.kind)+'</span>')+
+        cell("Name",r.name?esc(r.name):'<span class="muted">—</span>')+
+        cell("Email",r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':'<span class="muted">—</span>')+
+        cell("Rebuilding",r.focus?esc(r.focus):'<span class="muted">—</span>')+
+        cell("Season",r.season?esc(r.season):'<span class="muted">—</span>')+
+        cell("Wants to learn",tags(r.skills))+cell("Format",tags(r.learn))+'</tr>';
+    }).join("");
+    $("empty").hidden=list.length>0;
+    $("sTotal").textContent=all.length;
+    $("sWait").textContent=all.filter(function(r){return r.kind==="waitlist";}).length;
+    $("sInfo").textContent=all.filter(function(r){return r.kind==="research";}).length;
+    var em={}; all.forEach(function(r){ if(r.email) em[r.email.toLowerCase()]=1; }); $("sEmails").textContent=Object.keys(em).length;
+  }
+  function load(){
+    $("dataMsg").textContent="Loading…"; $("dataMsg").className="msg";
+    return sb.from("bling_responses").select("*").order("created_at",{ascending:false}).limit(5000).then(function(res){
+      if(res.error){ $("dataMsg").textContent="Couldn’t load: "+res.error.message; $("dataMsg").className="msg err"; return; }
+      all=res.data||[]; $("dataMsg").textContent="Updated "+new Date().toLocaleTimeString(); render();
+    });
+  }
+  function csv(){
+    var cols=["created_at","kind","name","email","focus","season","skills","learn"];
+    var lines=[cols.join(",")].concat(filtered().map(function(r){ return cols.map(function(c){ var v=r[c]; if(Array.isArray(v)) v=v.join("; "); v=v==null?"":String(v); return '"'+v.replace(/"/g,'""')+'"'; }).join(","); }));
+    var blob=new Blob([lines.join("\n")],{type:"text/csv"}), a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="broke-to-bling-"+new Date().toISOString().slice(0,10)+".csv"; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function enter(session){
+    if(!session){ $("who").textContent=""; show("loginView"); return; }
+    $("who").textContent=session.user.email;
+    sb.from("bling_admins").select("email").limit(1).then(function(r){
+      if(r.error||!r.data||!r.data.length){ show("deniedView"); return; }
+      show("dataView"); load();
+    });
+  }
+  $("loginForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    var em=$("loginEmail").value.trim(), btn=this.querySelector("button"), m=$("loginMsg");
+    btn.disabled=true; m.className="msg"; m.textContent="Sending…";
+    sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+"/admin.html"}}).then(function(r){
+      btn.disabled=false;
+      if(r.error){ m.className="msg err"; m.textContent=r.error.message; return; }
+      m.className="msg ok"; m.textContent="Check your inbox for the sign-in link. Open it on this device.";
+    });
+  });
+  document.querySelectorAll("[data-signout]").forEach(function(b){ b.addEventListener("click",function(){ sb.auth.signOut().then(function(){ enter(null); }); }); });
+  document.querySelectorAll(".tab").forEach(function(t){ t.addEventListener("click",function(){ kind=t.getAttribute("data-k"); document.querySelectorAll(".tab").forEach(function(o){o.setAttribute("aria-pressed",String(o===t));}); render(); }); });
+  $("q").addEventListener("input",render);
+  $("refresh").addEventListener("click",load);
+  $("csv").addEventListener("click",csv);
+  sb.auth.getSession().then(function(r){ enter(r.data.session); });
+  sb.auth.onAuthStateChange(function(ev,session){ if(ev==="SIGNED_IN"){ if(location.hash) history.replaceState(null,"",location.pathname); enter(session); } });
+})();
+</script>
+</body>
+</html>
