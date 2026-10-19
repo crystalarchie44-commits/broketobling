@@ -33,7 +33,7 @@ exports.handler = async (event) => {
   // Stripe Tax category (required by this account's Managed Payments): electronically supplied service.
   p.append("line_items[0][price_data][product_data][tax_code]", "txcd_10000000");
   p.append("success_url", SITE + "/thanks.html?session_id={CHECKOUT_SESSION_ID}");
-  p.append("cancel_url", SITE + "/get" + (gift ? "?give=1" : ""));
+  p.append("cancel_url", SITE + "/" + (gift ? "?give=1" : ""));
   p.append("submit_type", gift ? "donate" : "pay");
   p.append("metadata[kind]", gift ? "gift" : "product");
   if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) p.append("customer_email", email);
