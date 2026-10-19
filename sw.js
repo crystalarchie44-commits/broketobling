@@ -1,5 +1,5 @@
-const CACHE = "bling-v13";
-const FILES = ["./", "./index.html", "./diamond.png", "./logo.png", "./hallway.jpg", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
+const CACHE = "bling-v14";
+const FILES = ["./", "./index.html", "./diamond.png", "./logo.png", "./hallway.jpg", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./crystal.jpg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))); self.clients.claim(); });
 self.addEventListener("fetch", e => {
