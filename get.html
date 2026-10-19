@@ -55,7 +55,7 @@ img{max-width:100%;display:block}
 .price .cur{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:600;color:var(--gold);flex:0 0 32px}
 .price input{flex:1;min-width:0;border:0;background:transparent;color:var(--ivory);font:500 18px var(--ui);padding:8px 0;outline:none}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{appearance:none;flex:1 1 0;min-width:56px;border:1px solid var(--line);background:transparent;color:var(--mist);border-radius:999px;padding:8px 0;font:500 13px var(--ui);cursor:pointer}
+.chip{appearance:none;flex:1 1 0;min-width:52px;border:1px solid var(--line);background:transparent;color:var(--mist);border-radius:999px;padding:8px 0;font:500 13px var(--ui);cursor:pointer}
 .chip[aria-pressed="true"]{background:rgba(217,188,134,.16);color:var(--gold2);border-color:rgba(217,188,134,.6)}
 .email{width:100%;border:1px solid var(--line);border-radius:8px;padding:13px 14px;background:#080706;color:var(--ivory);font:15px var(--ui)}
 .btn{appearance:none;border:0;width:100%;border-radius:8px;padding:15px 18px;font:600 15px var(--ui);letter-spacing:.02em;cursor:pointer;color:#140F08;background:linear-gradient(135deg,var(--gold2),var(--gold) 55%,var(--gold3));box-shadow:0 10px 30px rgba(217,188,134,.18);transition:transform .15s ease,box-shadow .15s ease}
@@ -153,10 +153,16 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
     $("tag").textContent="$1+"; $("amtLbl").textContent="Choose your gift:"; amt.value="10";
     $("amtNote").textContent="Secure payment by card, Apple Pay, or Google Pay."; cta.textContent="Give now"; $("meta").hidden=true;
   }
-  $("chips").innerHTML=CHIPS.map(function(v){return '<button type="button" class="chip" data-v="'+v+'" aria-pressed="false">$'+v+'</button>';}).join("");
-  function syncChips(){ var v=parseFloat(amt.value)||0; document.querySelectorAll(".chip").forEach(function(c){c.setAttribute("aria-pressed",String(+c.getAttribute("data-v")===v));}); cta.textContent=give?"Give now":(v>0?"Continue to payment":"I want this!"); }
-  $("chips").addEventListener("click",function(e){ var c=e.target.closest(".chip"); if(!c) return; amt.value=c.getAttribute("data-v"); syncChips(); msg.textContent=""; });
-  amt.addEventListener("input",function(){ amt.value=amt.value.replace(/[^0-9.]/g,"").replace(/(\..*)\./g,"$1"); syncChips(); msg.textContent=""; });
+  $("chips").innerHTML=CHIPS.map(function(v){return '<button type="button" class="chip" data-v="'+v+'" aria-pressed="false">$'+v+'</button>';}).join("")+'<button type="button" class="chip chip-other" data-other="1" aria-pressed="false">Other</button>';
+  var otherOn=false;
+  function syncChips(){ var v=parseFloat(amt.value)||0, hit=false;
+    document.querySelectorAll(".chip[data-v]").forEach(function(c){ var on=!otherOn&&amt.value!==""&&+c.getAttribute("data-v")===v; if(on) hit=true; c.setAttribute("aria-pressed",String(on)); });
+    document.querySelector(".chip-other").setAttribute("aria-pressed",String(otherOn||(!hit&&amt.value!=="")));
+    cta.textContent=give?"Give now":(v>0?"Continue to payment":"I want this!"); }
+  $("chips").addEventListener("click",function(e){ var c=e.target.closest(".chip"); if(!c) return; msg.textContent="";
+    if(c.hasAttribute("data-other")){ otherOn=true; amt.value=""; syncChips(); amt.placeholder="Enter any amount"; amt.focus(); return; }
+    otherOn=false; amt.value=c.getAttribute("data-v"); syncChips(); });
+  amt.addEventListener("input",function(){ otherOn=false; amt.value=amt.value.replace(/[^0-9.]/g,"").replace(/(\..*)\./g,"$1"); syncChips(); msg.textContent=""; });
   email.addEventListener("input",function(){ msg.textContent=""; });
   syncChips();
 
