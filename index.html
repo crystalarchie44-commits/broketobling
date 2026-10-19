@@ -1181,6 +1181,7 @@ function renderToc(){
 }
 var lastIdx=-1;
 function go(view,arg){
+  stopVoice();
   window.scrollTo(0,0); document.body.classList.remove("chrome-hide");
   var key=(view==="section")?arg:view, ni=PAGES.findIndex(function(p){return p.k===key;});
   app.setAttribute("data-dir", (ni>=0&&lastIdx>=0&&ni<lastIdx)?"back":"fwd"); lastIdx=ni;
@@ -1401,10 +1402,32 @@ function backPage(){
       '<button class="skip" type="button" data-go="welcome">Go to Home</button></div>'+
   '</section>';
 }
+var VOICE_SRC={"faith":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184151_d97ab509-eb97-47d2-be97-dbc75a1ecc7c.mp3","healing":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184449_d2a1e7a4-fd01-43d7-91cf-0e5f14ee45aa.mp3","wisdom":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184450_9d57a8f4-9b3d-42b2-abf3-70d0d1fa4dd5.mp3","family":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184449_24290410-ae44-4f4e-b17e-fe330575154c.mp3","health":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184449_38f3abe0-e4d1-4b86-a49c-267aef66c4d4.mp3","finances":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184450_536ea0d0-2752-40f3-bc4d-1058c4300cd7.mp3","calling":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184449_b604b787-e314-4ba2-9aee-6ae91ff14479.mp3","protection":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184513_f1a3ded7-ce55-4e54-8f47-7aadc52e655b.mp3","perseverance":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184512_4f1ed73d-3b82-4122-8cf1-48d7ae406481.mp3","legacy":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184513_03f3f087-a08c-4a92-a874-3618c51d36b0.mp3","bling":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184512_dfe08218-011a-4023-930a-0da0fdf5dd73.mp3","letter":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_183842_712c009d-aa4d-49bf-84ef-16021685d51a.mp3"};
+var voice=null, voiceBtn=null;
+function stopVoice(){ if(voice){ try{voice.pause();}catch(e){} } if(voiceBtn){ voiceBtn.classList.remove("on"); voiceBtn.setAttribute("aria-pressed","false"); var sb=voiceBtn.querySelector(".lsub"); if(sb) sb.textContent=sb.getAttribute("data-idle"); } voice=null; voiceBtn=null; }
+function listenHTML(sub){ return '<button class="listen" type="button" id="listen" aria-pressed="false">'+
+  '<span class="play"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="currentColor"/></svg></span>'+
+  '<span class="listen-txt"><b>Hear Crystal read this</b><span class="lsub" id="listenSub" data-idle="'+sub+'">'+sub+'</span></span>'+
+  '<span class="wave" aria-hidden="true">'+(function(){var o="";for(var i=0;i<14;i++){o+='<i style="height:'+(6+Math.round(Math.abs(Math.sin(i*1.7))*16))+'px;animation-delay:'+(i*.07)+'s"></i>';}return o;})()+'</span></button>'; }
+function fmtT(t){ t=Math.max(0,Math.round(t||0)); return Math.floor(t/60)+":"+("0"+(t%60)).slice(-2); }
+function wireListen(file){
+  var b=document.getElementById("listen"); if(!b) return; var sub=b.querySelector(".lsub");
+  b.addEventListener("click",function(){
+    if(voiceBtn===b&&voice){ if(voice.paused){ voice.play().catch(function(){}); b.classList.add("on"); b.setAttribute("aria-pressed","true"); } else { voice.pause(); b.classList.remove("on"); b.setAttribute("aria-pressed","false"); sub.textContent="Paused · tap to resume"; } return; }
+    stopVoice(); try{ if(music){ stopMusic(); var mb=document.getElementById("musicBtn"); if(mb){ mb.setAttribute("aria-pressed","false"); mb.setAttribute("aria-label","Play soft music"); } } }catch(e){}
+    var a=new Audio(VOICE_SRC[file]||("audio/"+file+".mp3")); a.preload="auto"; voice=a; voiceBtn=b;
+    b.classList.add("on"); b.setAttribute("aria-pressed","true"); sub.textContent="Loading…";
+    a.addEventListener("timeupdate",function(){ if(voice===a&&!a.paused) sub.textContent="Playing · "+fmtT((a.duration||0)-a.currentTime); });
+    a.addEventListener("ended",function(){ if(voice===a){ stopVoice(); sub.textContent="Play again"; } });
+    a.addEventListener("error",function(){ if(voice===a){ stopVoice(); sub.textContent="Recording unavailable right now"; } });
+    a.play().catch(function(){ if(voice===a){ stopVoice(); sub.textContent="Tap again to play"; } });
+  });
+}
 function letter(){
   app.innerHTML='<section class="screen">'+
    '<div class="head"><span class="eyebrow">Before you begin</span><h2>A letter from Crystal</h2></div>'+
    '<article class="page letter-page">'+
+     listenHTML('Her letter to you')+
      '<p class="dear">Dear '+(state.name?nm():'sister')+',</p>'+
      '<p>Before you turn another page, I want you to know this: you are not too broken, too late, or too far gone. I know what it is to stand in the middle of a season that broke something inside you, your heart, your confidence, your plans. I am still rebuilding too.</p>'+
      '<p>These declarations are not a formula. They are a way of agreeing with God about who you are and what He is still able to do. Take your time. Start with the place that hurts the most. Speak the words out loud, even if your voice shakes.</p>'+
@@ -1414,6 +1437,7 @@ function letter(){
    '</article>'+
    '<div class="sec-foot"><button class="btn" type="button" data-go="welcome">Continue</button></div>'+
   '</section>';
+  wireListen("letter");
 }
 function isStandalone(){ try{ return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true; }catch(e){ return false; } }
 function platform(){ var u=navigator.userAgent||""; if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1)) return "ios"; if(/Android/.test(u)) return "android"; return "desktop"; }
@@ -1505,10 +1529,7 @@ function section(id){
      '<div class="scripture"><span class="label">Scripture</span>'+
        '<p class="verse">'+esc(s.verse)+'</p>'+
        '<span class="ref">'+esc(s.ref)+'<small>KJV</small></span></div>'+
-     '<button class="listen" type="button" id="listen" aria-pressed="false">'+
-       '<span class="play"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="currentColor"/></svg></span>'+
-       '<span class="listen-txt"><b>Hear Crystal read this</b><span id="listenSub">Declarations and prayer</span></span>'+
-       '<span class="wave" aria-hidden="true">'+bars+'</span></button>'+
+     listenHTML('Declarations and prayer')+
      '<div class="dsec"><span class="label">Declarations</span><p class="hint-line">'+(state.name?nm()+', speak':'Speak')+' each one slowly and aloud.</p>'+
        '<div class="dcard" id="dcard" aria-live="polite"></div>'+
        '<div class="dnav"><button type="button" class="dbtn" id="dPrev" aria-label="Previous declaration">‹</button>'+
@@ -1582,18 +1603,14 @@ function section(id){
   });
   var ta=document.getElementById("reflect-"+s.id), hint=document.getElementById("hint"), tm;
   ta.addEventListener("input",function(){state.reflect[s.id]=ta.value;persist();clearTimeout(tm);hint.textContent="Saved on this device";tm=setTimeout(function(){hint.textContent="";},1600);});
-  var ls=document.getElementById("listen");
-  ls.addEventListener("click",function(){
-    var on=ls.getAttribute("aria-pressed")!=="true";
-    ls.setAttribute("aria-pressed",String(on)); ls.classList.toggle("on",on);
-    document.getElementById("listenSub").textContent=on?"Crystal’s recording will play here":"Declarations and prayer";
-  });
+  wireListen(s.id);
 }
 function finale(){
   app.innerHTML='<section class="screen finale">'+
     '<span class="eyebrow">Close in agreement</span>'+
     '<h2>The B.L.I.N.G. Declaration</h2>'+
     '<p class="note">'+(state.name?'Say it out loud, '+nm()+'. ':'Say it out loud, slowly. ')+'Let every line point back to Him.</p>'+
+    listenHTML('Declare it together')+
     '<div class="letters">'+BLING.map(function(b){return '<div class="letter"><b>'+b.l+'</b><div><small>'+b.w+'</small><span>'+esc(b.t)+'</span></div></div>';}).join("")+'</div>'+
     '<p class="amen">I am not defined by what broke. I am being rebuilt by the God who restores, redeems, and makes all things new. By His grace, I will believe big, leave a legacy, inspire greatness, never give up, and glorify God. In Jesus’ name, amen.</p>'+
     '<div class="sit center"><span class="label">Scripture to sit with</span><p>Luke 1:45 · Isaiah 43:19 · Philippians 1:6 · Joel 2:25 · Psalm 126:5–6</p></div>'+
@@ -1611,6 +1628,7 @@ function finale(){
     '<div class="remember"><span class="eyebrow">Remember</span><p>'+(state.name?'<span class="who">'+nm()+'</span>, ':'')+(state.name?'God':'God')+' never called you to stay broken. He called you to believe again, rebuild with faith, and let the whole story give Him glory.</p></div>'+
     '<button class="btn ghost" type="button" data-go="choose">Return to the declarations</button>'+
   '</section>';
+  wireListen("bling");
   document.getElementById("invite").addEventListener("submit",function(e){
     e.preventDefault();
     var em=document.getElementById("email"), msg=document.getElementById("formMsg"), v=em.value.trim(), btn=this.querySelector("button[type=submit]");
