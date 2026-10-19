@@ -1,0 +1,15 @@
+{
+  "name": "Broke to B.L.I.N.G. Declarations",
+  "short_name": "B.L.I.N.G.",
+  "description": "Speak God’s Word over every broken place. A guided devotional for the woman rebuilding.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050404",
+  "theme_color": "#050404",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
