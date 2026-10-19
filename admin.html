@@ -45,6 +45,8 @@ h1{font-size:30px}
 .kind{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 9px;border-radius:999px;white-space:nowrap}
 .k-waitlist{background:rgba(243,223,174,.16);color:var(--gold2)}
 .k-research{background:rgba(159,211,168,.12);color:var(--ok)}
+.k-download{background:rgba(160,190,230,.12);color:#B9D0EE}
+.k-purchase{background:rgba(243,223,174,.28);color:#FFF4D6}
 .k-signup{background:rgba(185,175,160,.14);color:var(--mist)}
 .muted{color:var(--mist)}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
@@ -96,6 +98,8 @@ h1{font-size:30px}
       <div class="card stat"><b id="sTotal">0</b><span>Total entries</span></div>
       <div class="card stat"><b id="sWait">0</b><span>Called to Create waitlist</span></div>
       <div class="card stat"><b id="sInfo">0</b><span>Profile answers</span></div>
+      <div class="card stat"><b id="sDl">0</b><span>Free downloads</span></div>
+      <div class="card stat"><b id="sRaised">$0</b><span>Raised through Stripe</span></div>
       <div class="card stat"><b id="sEmails">0</b><span>Unique emails</span></div>
     </div>
     <div class="tools">
@@ -103,6 +107,8 @@ h1{font-size:30px}
         <button class="tab" type="button" data-k="all" aria-pressed="true">All</button>
         <button class="tab" type="button" data-k="waitlist" aria-pressed="false">Waitlist</button>
         <button class="tab" type="button" data-k="research" aria-pressed="false">Profile answers</button>
+        <button class="tab" type="button" data-k="download" aria-pressed="false">Downloads</button>
+        <button class="tab" type="button" data-k="purchase" aria-pressed="false">Payments</button>
         <button class="tab" type="button" data-k="signup" aria-pressed="false">Older email list</button>
       </div>
       <input id="q" type="search" placeholder="Search name, email, focus…" aria-label="Search">
@@ -114,7 +120,7 @@ h1{font-size:30px}
     <div class="card" style="padding:6px 8px">
       <div class="tablewrap">
         <table class="tbl">
-          <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Email</th><th>Rebuilding</th><th>Season</th><th>Wants to learn</th><th>Format</th></tr></thead>
+          <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Email</th><th>Amount</th><th>Rebuilding</th><th>Season</th><th>Wants to learn</th><th>Format</th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
@@ -131,7 +137,7 @@ h1{font-size:30px}
   var sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true,flowType:"implicit"}});
   var $=function(id){return document.getElementById(id);};
   var all=[], kind="all";
-  var LABEL={waitlist:"Waitlist",research:"Profile",signup:"Email list"};
+  var LABEL={waitlist:"Waitlist",research:"Profile",signup:"Email list",download:"Download",purchase:"Payment"};
   function show(v){ ["loginView","deniedView","dataView"].forEach(function(id){ $(id).hidden=(id!==v); }); }
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
   function fmt(t){ try{ return new Date(t).toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"}); }catch(e){ return t; } }
@@ -152,6 +158,7 @@ h1{font-size:30px}
         cell("Type",'<span class="kind k-'+esc(r.kind)+'">'+esc(LABEL[r.kind]||r.kind)+'</span>')+
         cell("Name",r.name?esc(r.name):'<span class="muted">—</span>')+
         cell("Email",r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':'<span class="muted">—</span>')+
+        cell("Amount",r.amount_cents?'<b style="color:var(--gold2)">$'+(r.amount_cents/100).toFixed(2)+'</b>':'<span class="muted">—</span>')+
         cell("Rebuilding",r.focus?esc(r.focus):'<span class="muted">—</span>')+
         cell("Season",r.season?esc(r.season):'<span class="muted">—</span>')+
         cell("Wants to learn",tags(r.skills))+cell("Format",tags(r.learn))+'</tr>';
@@ -160,6 +167,8 @@ h1{font-size:30px}
     $("sTotal").textContent=all.length;
     $("sWait").textContent=all.filter(function(r){return r.kind==="waitlist";}).length;
     $("sInfo").textContent=all.filter(function(r){return r.kind==="research";}).length;
+    $("sDl").textContent=all.filter(function(r){return r.kind==="download";}).length;
+    $("sRaised").textContent="$"+(all.reduce(function(t,r){return t+(r.kind==="purchase"&&r.amount_cents?r.amount_cents:0);},0)/100).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});
     var em={}; all.forEach(function(r){ if(r.email) em[r.email.toLowerCase()]=1; }); $("sEmails").textContent=Object.keys(em).length;
   }
   function load(){
@@ -170,7 +179,7 @@ h1{font-size:30px}
     });
   }
   function csv(){
-    var cols=["created_at","kind","name","email","focus","season","skills","learn"];
+    var cols=["created_at","kind","name","email","amount_cents","focus","season","skills","learn"];
     var lines=[cols.join(",")].concat(filtered().map(function(r){ return cols.map(function(c){ var v=r[c]; if(Array.isArray(v)) v=v.join("; "); v=v==null?"":String(v); return '"'+v.replace(/"/g,'""')+'"'; }).join(","); }));
     var blob=new Blob([lines.join("\n")],{type:"text/csv"}), a=document.createElement("a");
     a.href=URL.createObjectURL(blob); a.download="broke-to-bling-"+new Date().toISOString().slice(0,10)+".csv"; document.body.appendChild(a); a.click(); a.remove();
