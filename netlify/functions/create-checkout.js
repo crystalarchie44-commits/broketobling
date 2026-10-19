@@ -30,8 +30,8 @@ exports.handler = async (event) => {
   p.append("line_items[0][price_data][product_data][name]", name);
   p.append("line_items[0][price_data][product_data][description]", description);
   p.append("line_items[0][price_data][product_data][images][0]", SITE + "/cover.jpg");
-  // Stripe Tax category: gifts are non-taxable; the app is an electronically supplied service. Crystal's tax preparer can confirm.
-  p.append("line_items[0][price_data][product_data][tax_code]", gift ? "txcd_00000000" : "txcd_10000000");
+  // Stripe Tax category (required by this account's Managed Payments): electronically supplied service.
+  p.append("line_items[0][price_data][product_data][tax_code]", "txcd_10000000");
   p.append("success_url", SITE + "/thanks.html?session_id={CHECKOUT_SESSION_ID}");
   p.append("cancel_url", SITE + "/get" + (gift ? "?give=1" : ""));
   p.append("submit_type", gift ? "donate" : "pay");
