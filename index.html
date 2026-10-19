@@ -1299,13 +1299,17 @@ function personalize(){
   if(!first){ var lk=document.createElement("div"); lk.className="prefs-links"; lk.innerHTML='<button class="btn ghost" type="button" data-go="research">Help shape what comes next</button><button class="btn ghost" type="button" data-go="install">How to add this to your home screen</button>'; app.querySelector(".screen").appendChild(lk); }
 }
 /* ---------- Research step (optional) ---------- */
-var RESEARCH_ENDPOINT=""; /* paste the Google Sheet or email-service URL here to start receiving answers */
+/* Supabase: answers and signups go to the bling_responses table (insert-only for visitors) */
+var SB_URL="https://ukneifazkwdjljswxoab.supabase.co", SB_KEY="sb_publishable_45MaLGTuGjW493HuzgwQ5w_YFossgrZ";
+function sbInsert(row){
+  return fetch(SB_URL+"/rest/v1/bling_responses",{method:"POST",headers:{"apikey":SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(row)})
+    .then(function(r){ if(!r.ok) throw new Error("save failed "+r.status); return true; });
+}
 var R_SEASON=["Starting over after a loss or a hard ending","Changing careers or looking for new work","Rebuilding my finances","Growing or restarting a business","Ready for my next chapter, not sure what it is yet"];
 var R_SKILLS=["Using AI to save time, work smarter, or create income","Building an online business or side income","Content and social media","Money, budgeting, and planning","Speaking, leading, and sharing my story"];
 var R_LEARN=["Short videos I can watch anytime","Live sessions with other women","Step-by-step guides and templates","Accountability and prayer partners"];
 function sendResearch(r){
-  if(!RESEARCH_ENDPOINT) return;
-  try{ fetch(RESEARCH_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({name:state.name||"",focus:state.focus?(byId(state.focus)||{}).name:"",season:r.season,skills:r.skills.join("; "),learn:r.learn.join("; "),email:r.email||"",submitted:new Date().toISOString()})}).catch(function(){}); }catch(e){}
+  try{ sbInsert({kind:"research",name:state.name||null,email:r.email||null,focus:state.focus?((byId(state.focus)||{}).name||null):null,season:r.season||null,skills:r.skills,learn:r.learn}).catch(function(){}); }catch(e){}
 }
 function research(){
   var first=!state.research, r=state.research||{season:"",skills:[],learn:[],email:""};
@@ -1607,7 +1611,12 @@ function finale(){
   '</section>';
   document.getElementById("invite").addEventListener("submit",function(e){
     e.preventDefault();
-    document.getElementById("formMsg").textContent="Preview only. This form connects once your email list is chosen.";
+    var em=document.getElementById("email"), msg=document.getElementById("formMsg"), v=em.value.trim(), btn=this.querySelector("button[type=submit]");
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ msg.textContent="Enter a valid email address to join."; em.focus(); return; }
+    btn.disabled=true; msg.textContent="Joining…";
+    sbInsert({kind:"signup",name:state.name||null,email:v,focus:state.focus?((byId(state.focus)||{}).name||null):null})
+      .then(function(){ msg.textContent="You’re on the list"+(state.name?", "+state.name:"")+". Watch your inbox for encouragement."; em.value=""; toast("Welcome to the list","round"); })
+      .catch(function(){ msg.textContent="That didn’t go through. Check your connection and try again."; btn.disabled=false; });
   });
 }
 
