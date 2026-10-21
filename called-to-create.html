@@ -143,8 +143,9 @@ summary::-webkit-details-marker{display:none}
 summary::after{content:"+";color:var(--gold);font-size:20px;line-height:1}
 details[open] summary::after{content:"–"}
 details p{padding:0 0 16px;color:#DCD3C4;font-size:15px}
-footer{max-width:1080px;margin:40px auto 0;padding:22px 16px 46px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);border-top:1px solid var(--line-soft)}
+footer{max-width:1080px;margin:40px auto 0;padding:22px 16px 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);border-top:1px solid var(--line-soft)}
 footer a{color:var(--gold);text-decoration:none}
+.fw-credit{text-align:center;font-size:11.5px;line-height:1.8;color:rgba(201,192,178,.75);padding:0 16px 40px}.fw-credit span[aria-label]{color:var(--gold)}.fw-credit b{color:var(--gold2);font-weight:600}.fw-credit .dot{margin:0 8px;opacity:.5}.fw-credit a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}@media (max-width:600px){.fw-credit .dot{display:none}.fw-credit a{display:block}}
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
 @media (max-width:860px){
@@ -340,6 +341,7 @@ footer a{color:var(--gold);text-decoration:none}
   </section>
 </main>
 <footer><span>Called to Create · with Crystal Archie</span><span>Made with prayer & a little B.L.I.N.G. ✨</span><a href="/">Broke to B.L.I.N.G.</a></footer>
+<div class="fw-credit">App created with <span aria-label="love">♥</span> by <b>FutureWorks</b><span class="dot">·</span><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></div>
 
 <script>
 (function(){
