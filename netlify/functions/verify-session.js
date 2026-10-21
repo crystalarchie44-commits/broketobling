@@ -26,7 +26,7 @@ exports.handler = async (event) => {
     await fetch(SB_URL + "/rest/v1/bling_responses", {
       method: "POST",
       headers: { apikey: SB_KEY, "Content-Type": "application/json", Prefer: "return=minimal" },
-      body: JSON.stringify({ kind: "purchase", email, name: name ? String(name).slice(0, 60) : null, amount_cents: s.amount_total, ref: s.id, focus: kind === "gift" ? "Gift (Sow a Seed)" : "Pay what you want" }),
+      body: JSON.stringify({ kind: "purchase", email, name: name ? String(name).slice(0, 60) : null, amount_cents: s.amount_total, ref: s.id, show_public: !!(s.metadata && s.metadata.show_public === "1"), focus: kind === "gift" ? "Gift (Sow a Seed)" : "Pay what you want" }),
     }).catch(() => {});
   }
   return { statusCode: 200, headers, body: JSON.stringify({ paid, kind, amount: s.amount_total, email, name: (s.metadata && s.metadata.first_name) || null }) };
