@@ -1,4 +1,4 @@
-// PayPal + Venmo checkout (PayPal Orders v2, live).
+// PayPal + Venmo checkout (PayPal Orders v2, live). Keys added in Netlify 2026-10-21.
 // Needs PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in Netlify (secret never in the site code).
 // POST {action:"config"} -> {clientId}
 // POST {action:"create", amount(cents), mode, name, email, pub} -> {id}
