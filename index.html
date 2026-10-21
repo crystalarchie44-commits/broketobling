@@ -89,6 +89,7 @@ img{max-width:100%;display:block}
 @media (max-width:600px){.sp{top:10px;bottom:auto;left:50%;width:calc(100vw - 24px);max-width:420px;transform:translate(-50%,-16px);padding:9px 30px 9px 10px;gap:10px}.sp.show{transform:translate(-50%,0)}.sp img{width:28px;height:28px;flex-basis:28px}.sp b{font-size:12.5px}.sp span{font-size:11px}}
 @media (prefers-reduced-motion:reduce){.sp{transition:none}}
 .credit{max-width:1120px;margin:0 auto;padding:0 16px 34px;text-align:center;font-size:12.5px;color:var(--mist);line-height:1.8}.credit span[aria-label]{color:#D9BC86}.credit b{color:#F3DFAE;font-weight:600}.credit .dot{margin:0 8px;color:rgba(217,188,134,.5)}.credit .cby{white-space:nowrap}@media (max-width:600px){.credit .dot{display:none}.credit a{display:block}}.credit a{color:#D9BC86;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.ppor{display:flex;align-items:center;gap:10px;margin:2px 0 10px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}.ppor::before,.ppor::after{content:"";flex:1;height:1px;background:rgba(217,188,134,.2)}#ppBtns{min-height:45px;border-radius:8px;overflow:hidden}
 footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);border-top:1px solid var(--line-soft)}
 @media (max-width:820px){
   .body{grid-template-columns:1fr}
@@ -148,6 +149,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justif
           <label class="pub"><input type="checkbox" id="pub" checked><span>Show my first name in the “recent supporters” notes on this page</span></label>
           <p class="msg" id="msg" role="alert"></p>
           <button class="btn" type="submit" id="cta">I want this!</button>
+          <div id="ppWrap" hidden><div class="ppor"><span>or pay with</span></div><div id="ppBtns"></div></div>
           <p class="note" id="amtNote">Enter 0 to get it free. Any amount over $1 is a gift that supports this work.</p>
         </form>
         <div class="meta" id="meta">
@@ -239,6 +241,46 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justif
   });
 })();
 
+/* PayPal + Venmo: buttons appear for amounts of $1 or more, once PayPal is set up in Netlify */
+(function(){
+  var wrap=document.getElementById("ppWrap"), amtEl=document.getElementById("amt"), emEl=document.getElementById("email"), fnEl=document.getElementById("fname"), msgEl=document.getElementById("msg"), pubEl=document.getElementById("pub");
+  var give=/[?&](give|support)=1/.test(location.search), ready=false;
+  function cents(){ return Math.round((parseFloat(amtEl.value)||0)*100); }
+  function sync(){ wrap.hidden=!(ready&&cents()>=100); }
+  ["input","change","click"].forEach(function(ev){ document.getElementById("buy").addEventListener(ev,function(){ setTimeout(sync,0); }); });
+  function check(){
+    var c=cents(), e=emEl.value.trim(), n=(fnEl.value||"").trim();
+    if(!n){ msgEl.textContent="Enter your first name."; fnEl.focus(); return false; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){ msgEl.textContent="Enter your email so we can send you access."; emEl.focus(); return false; }
+    if(c<100){ msgEl.textContent="PayPal and Venmo start at $1."; return false; }
+    if(c>1000000){ msgEl.textContent="For gifts over $10,000, please reach out directly."; return false; }
+    msgEl.textContent=""; return true;
+  }
+  function post(body){ return fetch("/.netlify/functions/paypal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||"PayPal error"); return j; }); }); }
+  post({action:"config"}).then(function(cfg){
+    if(!cfg.clientId) return;
+    var sc=document.createElement("script");
+    sc.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(cfg.clientId)+"&currency=USD&intent=capture&components=buttons&enable-funding=venmo&disable-funding=card,credit,paylater";
+    sc.onload=function(){
+      if(!window.paypal||!paypal.Buttons) return;
+      paypal.Buttons({
+        style:{layout:"vertical",color:"gold",shape:"rect",label:"pay",height:45,tagline:false},
+        onClick:function(data,actions){ return check()?actions.resolve():actions.reject(); },
+        createOrder:function(){ return post({action:"create",amount:cents(),mode:give?"gift":"product",name:fnEl.value.trim(),email:emEl.value.trim(),pub:!!(pubEl&&pubEl.checked)}).then(function(j){ return j.id; }); },
+        onApprove:function(data){
+          msgEl.textContent="Confirming your payment…";
+          return post({action:"capture",id:data.orderID}).then(function(j){
+            if(!j.ok){ msgEl.textContent="PayPal hasn’t confirmed the payment yet. If you were charged, your PayPal receipt is your confirmation."; return; }
+            try{ var a=JSON.parse(localStorage.getItem("bling-access")||"{}")||{}; a.email=emEl.value.trim()||j.email; a.name=fnEl.value.trim()||j.name; a.paid=true; a.at=Date.now(); localStorage.setItem("bling-access",JSON.stringify(a)); }catch(e){}
+            location.href="/thanks.html?pp=1&amt="+j.amount+"&k="+encodeURIComponent(j.kind);
+          });
+        },
+        onError:function(){ msgEl.textContent="PayPal didn’t go through. Please try again, or pay by card."; }
+      }).render("#ppBtns").then(function(){ ready=true; sync(); }).catch(function(){});
+    };
+    document.head.appendChild(sc);
+  }).catch(function(){});
+})();
 /* Mobile: a sticky "I want this!" bar once the price box has scrolled away */
 (function(){
   var side=document.getElementById("side"), st=document.getElementById("stick");

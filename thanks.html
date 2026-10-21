@@ -109,6 +109,7 @@ p{margin:0;color:#E8E0D2}
     if(amt){ $("giftTag").textContent=(isGift?"Your gift · ":"Your contribution · ")+amt; $("giftTag").hidden=false; }
   }
   paint(acc().name,null,null);
+  if(/[?&]pp=1/.test(q)){ var pa=+((q.match(/[?&]amt=(\d+)/)||[])[1]||0), pk=(q.match(/[?&]k=(\w+)/)||[])[1]||"product"; paint(acc().name,pa||null,pk); $("receipt").textContent="PayPal will email your receipt."; return; }
   var id=(q.match(/session_id=([^&]+)/)||[])[1];
   if(!id) return;
   fetch("/.netlify/functions/verify-session?session_id="+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(j){
