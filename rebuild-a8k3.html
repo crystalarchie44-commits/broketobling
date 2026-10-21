@@ -1452,7 +1452,7 @@ function backPage(){
       '<button class="skip" type="button" data-go="welcome">Go to Home</button></div>'+
   '</section>';
 }
-var VOICE_SRC={"faith":"/audio/faith.mp3","healing":"/audio/healing.mp3","wisdom":"/audio/wisdom.mp3","family":"/audio/family.mp3","health":"/audio/health.mp3","finances":"/audio/finances.mp3","calling":"/audio/calling.mp3","protection":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184513_f1a3ded7-ce55-4e54-8f47-7aadc52e655b.mp3","perseverance":"/audio/perseverance.mp3","legacy":"https://d8j0ntlcm91z4.cloudfront.net/user_2yUitAUMXAZWiouVvn5HBJIfVPb/hf_20261019_184513_03f3f087-a08c-4a92-a874-3618c51d36b0.mp3","bling":"/audio/bling.mp3","letter":"/audio/letter.mp3"};
+var VOICE_SRC={"faith":"/audio/faith.mp3","healing":"/audio/healing.mp3","wisdom":"/audio/wisdom.mp3","family":"/audio/family.mp3","health":"/audio/health.mp3","finances":"/audio/finances.mp3","calling":"/audio/calling.mp3","protection":"/audio/protection.mp3","perseverance":"/audio/perseverance.mp3","legacy":"/audio/legacy.mp3","bling":"/audio/bling.mp3","letter":"/audio/letter.mp3"};
 var voice=null, voiceBtn=null;
 function stopVoice(){ if(voice){ try{voice.pause();}catch(e){} } if(voiceBtn){ voiceBtn.classList.remove("on"); voiceBtn.setAttribute("aria-pressed","false"); var sb=voiceBtn.querySelector(".lsub"); if(sb) sb.textContent=sb.getAttribute("data-idle"); } voice=null; voiceBtn=null; }
 function listenHTML(sub){ return '<button class="listen" type="button" id="listen" aria-pressed="false">'+
