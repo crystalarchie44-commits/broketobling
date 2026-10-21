@@ -92,10 +92,24 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
 @media (max-width:820px){
   .body{grid-template-columns:1fr}
   .main{display:contents}
-  .main h1{order:1}.by{order:2}.side{order:3;border-bottom:1px solid var(--line)}.desc{order:4}
+  .main h1{order:1}.by{order:2}.intro{order:3;display:block!important}.side{order:4;border-bottom:1px solid var(--line);scroll-margin-top:12px}.desc{order:5}.again{order:6;display:block!important}
   .main h1{padding:20px 18px}
   .by,.desc{padding-left:18px;padding-right:18px}
 }
+
+.intro{display:none;padding:0 18px 18px;margin:0;color:#E8DFD0;font-size:16px;line-height:1.65}
+.intro b{color:#FFFCF6}
+.again{display:none;padding:6px 18px 30px;text-align:center}
+.again p{font-family:var(--display,Georgia),serif;font-style:italic;font-size:20px;color:#F3DFAE;margin:0 0 12px}
+.again a{display:block;text-decoration:none;text-align:center;border-radius:10px;padding:15px 20px;font:600 15px var(--ui);color:#140F08;background:linear-gradient(135deg,#F3DFAE,#D9BC86 55%,#B98A45)}
+.stick{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:40;display:none;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 16px;border-radius:14px;background:rgba(11,10,9,.96);border:1px solid rgba(217,188,134,.45);box-shadow:0 14px 40px rgba(0,0,0,.6);transform:translateY(140%);transition:transform .35s ease}
+.stick.on{transform:none}
+.stick span{font-size:13.5px;color:#E8DFD0;line-height:1.3}
+.stick span b{display:block;color:#FFFCF6;font-size:14.5px}
+.stick a{flex:none;text-decoration:none;border-radius:10px;padding:12px 16px;font:600 14px var(--ui);color:#140F08;background:linear-gradient(135deg,#F3DFAE,#D9BC86 55%,#B98A45)}
+@media (max-width:820px){.stick{display:flex}body{padding-bottom:90px}}
+.pub{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mist);line-height:1.45;cursor:pointer}
+.pub input{margin:2px 0 0;width:16px;height:16px;accent-color:#D9BC86;flex:none}
 </style>
 </head>
 <body>
@@ -111,6 +125,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
       <section class="main">
         <h1 id="title">The Broke to B.L.I.N.G. Declarations</h1>
         <div class="by"><img src="crystal.jpg" alt=""><span>Crystal Archie</span></div>
+        <p class="intro" id="intro"><b>Scripture-inspired declarations and prayers</b> for the seasons when life feels broken and hard to rebuild, read to you by Crystal in her own voice. It’s free. If it blesses you, you’re welcome to give any amount.</p>
         <div class="desc" id="desc">
           <p><b>The Broke to B.L.I.N.G. Declarations</b> is a faith-filled collection of Scripture-inspired declarations for the seasons when life feels broken, uncertain, or hard to rebuild.</p>
           <p>Use these words to pause, pray, and speak truth over the areas of life that need hope and renewal, from faith and identity to family, health, finances, and purpose. Each declaration is a reminder that a difficult season does not define your whole story, and with God, you can believe again and take your next step.</p>
@@ -129,6 +144,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
           <div class="chips" id="chips" role="group" aria-label="Quick amounts"></div>
           <input class="email" id="fname" type="text" placeholder="First name" autocomplete="given-name" maxlength="60" aria-label="First name" required>
           <input class="email" id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address" required>
+          <label class="pub"><input type="checkbox" id="pub" checked><span>Show my first name in the “recent supporters” notes on this page</span></label>
           <p class="msg" id="msg" role="alert"></p>
           <button class="btn" type="submit" id="cta">I want this!</button>
           <p class="note" id="amtNote">Enter 0 to get it free. Any amount over $1 is a gift that supports this work.</p>
@@ -149,9 +165,11 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
           <a class="btn" href="/rebuild-a8k3" id="openBtn" style="text-decoration:none;text-align:center">Open the declarations</a>
         </div>
       </aside>
+      <div class="again" id="again"><p>Ready to start declaring?</p><a href="#side" data-to-side>Get the declarations</a></div>
     </div>
   </article>
 </main>
+<div class="stick" id="stick" aria-hidden="true"><span><b>Free, or pay what you want</b>Hear Crystal read every declaration</span><a href="#side" data-to-side tabindex="-1">I want this!</a></div>
 <div class="sp" id="sp" role="status" aria-live="polite"><img src="diamond.png" alt=""><div><b id="spText"></b><span id="spTime"></span></div><button type="button" id="spX" aria-label="Hide notifications">×</button></div>
 <footer><span>Broke to B.L.I.N.G. · with Crystal</span><span>Secure checkout by Stripe</span></footer>
 
@@ -205,11 +223,11 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
     cta.disabled=true;
     if(v===0){
       cta.textContent="One moment…";
-      sbInsert({kind:"download",name:fn||null,email:e}).catch(function(){}).then(function(){ grant(e,fn); showDone(); });
+      sbInsert({kind:"download",name:fn||null,email:e,show_public:$("pub").checked}).catch(function(){}).then(function(){ grant(e,fn); showDone(); });
       return;
     }
     cta.textContent="Opening secure checkout…";
-    fetch("/.netlify/functions/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:Math.round(v*100),email:e,name:fn,mode:give?"gift":"product"})})
+    fetch("/.netlify/functions/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:Math.round(v*100),email:e,name:fn,pub:$("pub").checked,mode:give?"gift":"product"})})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){ if(res.ok&&res.j.url){ location.href=res.j.url; } else { throw new Error(res.j&&res.j.error||"unavailable"); } })
       .catch(function(){
@@ -219,7 +237,15 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
   });
 })();
 
-/* Social proof: shows only real, recent activity from the database. Anonymous: no names, emails or amounts. */
+/* Mobile: a sticky "I want this!" bar once the price box has scrolled away */
+(function(){
+  var side=document.getElementById("side"), st=document.getElementById("stick");
+  if(/[?&](give|support)=1/.test(location.search)){ st.querySelector("span").innerHTML="<b>Sow a seed, any amount</b>Supports The Treasured Foundation"; st.querySelector("a").textContent="Give now"; document.querySelector("#again p").textContent="Feel led to sow a seed?"; document.querySelector("#again a").textContent="Give now"; }
+  document.querySelectorAll("[data-to-side]").forEach(function(a){ a.addEventListener("click",function(e){ e.preventDefault(); side.scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(function(){ var f=document.getElementById("fname"); if(f&&!document.getElementById("buy").hidden) f.focus({preventScroll:true}); },700); }); });
+  function upd(){ var r=side.getBoundingClientRect(), ag=document.getElementById("again").getBoundingClientRect(), on=r.bottom<0&&ag.top>innerHeight-40&&!document.getElementById("buy").hidden; st.classList.toggle("on",on); st.setAttribute("aria-hidden",String(!on)); st.querySelector("a").tabIndex=on?0:-1; }
+  addEventListener("scroll",upd,{passive:true}); addEventListener("resize",upd); upd();
+})();
+/* Social proof: shows only real, recent activity. First names and amounts appear only for people who ticked "Show my first name". */
 (function(){
   var SB_URL="https://ukneifazkwdjljswxoab.supabase.co", SB_KEY="sb_publishable_45MaLGTuGjW493HuzgwQ5w_YFossgrZ";
   var box=document.getElementById("sp"), off=false;
@@ -233,8 +259,9 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
       var i=0, shown=0;
       function next(){
         if(off||shown>=6||i>=list.length) return;
-        var ev=list[i++], opts=LINES[ev.kind]||LINES.download;
-        document.getElementById("spText").textContent=opts[i%opts.length];
+        var ev=list[i++], opts=LINES[ev.kind]||LINES.download, fnm=ev.first_name, amt=ev.amount_cents?("$"+(ev.amount_cents/100).toFixed(2).replace(/\.00$/,"")):"";
+        var line=fnm?(ev.kind==="gift"?(fnm+(amt?" sowed "+amt+" into":" sowed a seed into")+" Broke to B.L.I.N.G. 🤍"):(fnm+" got the Broke to B.L.I.N.G. Declarations")):opts[i%opts.length];
+        document.getElementById("spText").textContent=line;
         document.getElementById("spTime").textContent=ago(ev.created_at);
         box.classList.add("show"); shown++;
         setTimeout(function(){ box.classList.remove("show"); setTimeout(next,9000); },5500);
