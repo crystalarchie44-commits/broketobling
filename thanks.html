@@ -54,6 +54,7 @@ p{margin:0;color:#E8E0D2}
   if(!id){ return; }
   fetch("/.netlify/functions/verify-session?session_id="+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(j){
     if(!j||!j.paid){ document.getElementById("eyebrow").textContent="Almost there"; document.getElementById("text").textContent="We could not confirm your payment yet. If you were charged, your receipt from Stripe is your confirmation, and your access is ready below."; return; }
+    if(j.email){ try{ localStorage.setItem("bling-access",JSON.stringify({at:Date.now(),paid:true,email:j.email,name:j.name||null})); }catch(e){} }
     var amt=j.amount?("$"+(j.amount/100).toFixed(2).replace(/\.00$/,"")):"";
     if(j.kind==="gift"){ document.getElementById("title").textContent="Thank you for sowing"+(amt?" "+amt:""); document.getElementById("text").textContent="A receipt is on its way to "+(j.email||"your inbox")+"."; }
     else { document.getElementById("title").textContent="You’re in. Thank you!"; document.getElementById("text").textContent="Your declarations are ready. A receipt is on its way to "+(j.email||"your inbox")+"."; }

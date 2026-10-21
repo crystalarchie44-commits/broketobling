@@ -1354,7 +1354,7 @@ function personalize(){
    '<form class="page prefs" id="prefsForm" novalidate>'+
      '<div class="q"><label class="ql" for="pName"><span class="qn">1</span>What name should these declarations be spoken over?</label>'+
        '<p class="qh">Just your first name. Every page will speak to you by name.</p>'+
-       '<input id="pName" class="txt" type="text" maxlength="30" placeholder="Your first name" autocomplete="given-name" value="'+(state.name?esc(state.name):'')+'"></div>'+
+       '<input id="pName" class="txt" type="text" maxlength="30" placeholder="Your first name" autocomplete="given-name" value="'+esc(state.name||accessName())+'"></div>'+
      '<div class="q"><span class="ql" id="focusLbl"><span class="qn">2</span>What are you rebuilding most right now?</span>'+
        '<p class="qh">Tap one area. Tap it again to clear it. You can still visit every section.</p>'+
        '<div class="chips" role="radiogroup" aria-labelledby="focusLbl">'+SECTIONS.map(function(x){
@@ -1385,13 +1385,14 @@ function personalize(){
   if(first&&!shortForm) wireResearchChips();
   document.getElementById("prefsForm").addEventListener("submit",function(e){
     e.preventDefault();
-    var res=null;
+    var res=null, prevName=state.name, prevFocus=state.focus;
     if(first&&!shortForm){ res=readResearch(); if(!res) return; }
     setName(document.getElementById("pName").value);
     state.focus=focus; state.size=size; state.prefs=true;
     if(res){ state.research=res; }
     persist(); applySize();
     if(res) sendResearch(res);
+    else if(first||state.name!==prevName||state.focus!==prevFocus){ try{ var ac=JSON.parse(localStorage.getItem("bling-access")||"{}"); sbInsert({kind:"research",name:state.name||null,email:ac.email||null,focus:state.focus?((byId(state.focus)||{}).name||null):null}).catch(function(){}); }catch(e){} }
     toast(state.name?"Saved, "+state.name:"Preferences saved","round");
     if(shortForm){ state.onboarded=true; state.installSeen=true; persist(); go("welcome"); return; }
     go(first?"letter":"choose");
@@ -1410,8 +1411,9 @@ function sbInsert(row){
 var R_SEASON=["Starting over after a loss or a hard ending","Changing careers or looking for new work","Rebuilding my finances","Growing or restarting a business","Ready for my next chapter, not sure what it is yet"];
 var R_SKILLS=["Using AI to save time, work smarter, or create income","Building an online business or side income","Content and social media","Money, budgeting, and planning","Speaking, leading, and sharing my story"];
 var R_LEARN=["Short videos I can watch anytime","Live sessions with other women","Step-by-step guides and templates","Accountability and prayer partners"];
+function accessName(){ try{ return (JSON.parse(localStorage.getItem("bling-access")||"{}")).name||""; }catch(e){ return ""; } }
 function sendResearch(r){
-  try{ sbInsert({kind:"research",name:state.name||null,email:r.email||null,focus:state.focus?((byId(state.focus)||{}).name||null):null,season:r.season||null,skills:r.skills,learn:r.learn}).catch(function(){}); }catch(e){}
+  try{ var acE=null; try{ acE=(JSON.parse(localStorage.getItem("bling-access")||"{}")).email||null; }catch(x){} sbInsert({kind:"research",name:state.name||null,email:r.email||acE,focus:state.focus?((byId(state.focus)||{}).name||null):null,season:r.season||null,skills:r.skills,learn:r.learn}).catch(function(){}); }catch(e){}
 }
 function rChips(list,group,multi,sel){ return '<div class="chips rchips" role="'+(multi?'group':'radiogroup')+'" aria-labelledby="'+group+'Lbl">'+list.map(function(t,i){ var on=multi?sel.indexOf(t)>-1:sel===t;
     return '<button type="button" class="chip rchip" '+(multi?'aria-pressed':'role="radio" aria-checked')+'="'+on+'" data-g="'+group+'" data-v="'+i+'"><span>'+esc(t)+'</span></button>'; }).join("")+'</div>'; }

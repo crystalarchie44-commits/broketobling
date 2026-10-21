@@ -127,6 +127,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
           <label class="lbl" for="amt" id="amtLbl">Name a fair price:</label>
           <div class="price"><span class="cur" aria-hidden="true">$</span><input id="amt" inputmode="decimal" autocomplete="off" value="0" aria-describedby="amtNote"></div>
           <div class="chips" id="chips" role="group" aria-label="Quick amounts"></div>
+          <input class="email" id="fname" type="text" placeholder="First name" autocomplete="given-name" maxlength="60" aria-label="First name">
           <input class="email" id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address" required>
           <p class="msg" id="msg" role="alert"></p>
           <button class="btn" type="submit" id="cta">I want this!</button>
@@ -190,12 +191,12 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
     return fetch(SB_URL+"/rest/v1/bling_responses",{method:"POST",headers:{"apikey":SB_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(row)})
       .then(function(r){ if(!r.ok) throw new Error("save failed"); });
   }
-  function grant(e){ try{ localStorage.setItem("bling-access",JSON.stringify({email:e,at:Date.now()})); }catch(x){} }
+  function grant(e,n){ try{ localStorage.setItem("bling-access",JSON.stringify({email:e,name:n||null,at:Date.now()})); }catch(x){} }
   function showDone(){ $("buy").hidden=true; $("meta").hidden=true; $("mission").hidden=true; $("done").hidden=false; $("done").scrollIntoView({behavior:"smooth",block:"center"}); }
 
   $("buy").addEventListener("submit",function(ev){
     ev.preventDefault();
-    var v=Math.round((parseFloat(amt.value)||0)*100)/100, e=email.value.trim();
+    var v=Math.round((parseFloat(amt.value)||0)*100)/100, e=email.value.trim(), fn=($("fname").value||"").trim().slice(0,60);
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){ msg.textContent="Enter your email so we can send you access."; email.focus(); return; }
     if(give&&v<1){ msg.textContent="Gifts start at $1."; amt.focus(); return; }
     if(v>0&&v<1){ msg.textContent="Enter 0 for free, or $1 or more to contribute."; amt.focus(); return; }
@@ -203,11 +204,11 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
     cta.disabled=true;
     if(v===0){
       cta.textContent="One moment…";
-      sbInsert({kind:"download",email:e}).catch(function(){}).then(function(){ grant(e); showDone(); });
+      sbInsert({kind:"download",name:fn||null,email:e}).catch(function(){}).then(function(){ grant(e,fn); showDone(); });
       return;
     }
     cta.textContent="Opening secure checkout…";
-    fetch("/.netlify/functions/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:Math.round(v*100),email:e,mode:give?"gift":"product"})})
+    fetch("/.netlify/functions/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:Math.round(v*100),email:e,name:fn,mode:give?"gift":"product"})})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){ if(res.ok&&res.j.url){ location.href=res.j.url; } else { throw new Error(res.j&&res.j.error||"unavailable"); } })
       .catch(function(){
