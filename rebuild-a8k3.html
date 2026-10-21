@@ -20,7 +20,10 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://broketobling.com/og-image.jpg">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Larger text: scale every page in the app, not just a few elements */
+body.big #app{zoom:1.15}
+</style>
 <meta name="robots" content="noindex">
 <script>(function(){try{var q=location.search,ok=/[?&]access=/.test(q)||!!localStorage.getItem("bling-access")||!!localStorage.getItem("bling-declarations-v2")||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
 if(/[?&]access=/.test(q)){localStorage.setItem("bling-access",JSON.stringify({via:(q.match(/access=([^&]*)/)||[])[1]||"link",at:Date.now()}));history.replaceState(null,"",location.pathname);}
@@ -1311,6 +1314,7 @@ function personalize(){
     size=c.getAttribute("data-size");
     app.querySelectorAll("[data-size]").forEach(function(o){o.setAttribute("aria-checked",String(o.getAttribute("data-size")===size));});
     state.size=size; applySize();
+    var seg=c.closest(".seg"); if(seg) requestAnimationFrame(function(){ seg.scrollIntoView({block:"center"}); });
   });});
   if(first) wireResearchChips();
   document.getElementById("prefsForm").addEventListener("submit",function(e){
