@@ -20,18 +20,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://broketobling.com/og-image.jpg">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
-/* Larger text: scale every page in the app, not just a few elements */
-body.big #app{zoom:1.15}
-
-/* Readability pass: keep the hallway mood but never let its light streaks sit behind text */
-body:not(.on-home) .scene .vignette{background:linear-gradient(90deg,rgba(5,4,4,.8),rgba(5,4,4,.93) 14%,rgba(5,4,4,.95) 50%,rgba(5,4,4,.93) 86%,rgba(5,4,4,.8))!important}
-@media (max-width:700px){body:not(.on-home) .scene .vignette{background:rgba(5,4,4,.9)!important}}
-.chip,.rchip,.seg button,.txt,#app textarea,#app input[type=email],#app input[type=text],.tile{background:rgba(11,10,9,.94)!important}
-.rchip[aria-pressed="true"],.rchip[aria-checked="true"],.chip[aria-checked="true"],.seg button[aria-checked="true"]{background:linear-gradient(rgba(217,188,134,.14),rgba(217,188,134,.14)),rgba(11,10,9,.96)!important}
-.qh,.head p,.hint-line,.note,.saved-hint,.prefs .qh{color:#DCD3C4!important}
-#app h2,#app h3,.ql,.qh,.head p{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 18px rgba(0,0,0,.9)}
-</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <meta name="robots" content="noindex">
 <script>(function(){try{var q=location.search,ok=/[?&]access=/.test(q)||!!localStorage.getItem("bling-access")||!!localStorage.getItem("bling-declarations-v2")||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
 if(/[?&]access=/.test(q)){localStorage.setItem("bling-access",JSON.stringify({via:(q.match(/access=([^&]*)/)||[])[1]||"link",at:Date.now()}));history.replaceState(null,"",location.pathname);}
@@ -902,6 +891,36 @@ body.has-tabs .wrap{padding-bottom:120px!important}
 .ctc-list{list-style:none;margin:2px 0 4px;padding:0;display:grid;gap:10px;text-align:left;max-width:340px}
 .ctc-list li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.45;color:var(--mist,#cfc6b8)}
 .ctc-list li svg,.ctc-list li img{flex:0 0 16px;width:16px;height:16px;margin-top:2px}
+
+/* Larger text: scale every page in the app, not just a few elements */
+body.big #app{zoom:1.15}
+
+/* Readability pass: keep the hallway mood but never let its light streaks sit behind text */
+body:not(.on-home) .scene .vignette{background:linear-gradient(90deg,rgba(5,4,4,.8),rgba(5,4,4,.93) 14%,rgba(5,4,4,.95) 50%,rgba(5,4,4,.93) 86%,rgba(5,4,4,.8))!important}
+@media (max-width:700px){body:not(.on-home) .scene .vignette{background:rgba(5,4,4,.9)!important}}
+.chip,.rchip,.seg button,.txt,#app textarea,#app input[type=email],#app input[type=text],.tile{background:rgba(11,10,9,.94)!important}
+.rchip[aria-pressed="true"],.rchip[aria-checked="true"],.chip[aria-checked="true"],.seg button[aria-checked="true"]{background:linear-gradient(rgba(217,188,134,.14),rgba(217,188,134,.14)),rgba(11,10,9,.96)!important}
+.qh,.head p,.hint-line,.note,.saved-hint,.prefs .qh{color:#DCD3C4!important}
+#app h2,#app h3,.ql,.qh,.head p{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 18px rgba(0,0,0,.9)}
+
+/* Prominent "Hear Crystal read this" card with her photo */
+.listen{width:100%;display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px!important;padding:14px 18px 14px 14px!important;border-radius:18px!important;
+ background:radial-gradient(120% 140% at 0% 50%,rgba(217,188,134,.18),transparent 55%),linear-gradient(180deg,#15120E,#0B0A09)!important;border:1px solid rgba(217,188,134,.55)!important;
+ box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 0 1px rgba(255,248,230,.05) inset,0 0 34px rgba(217,188,134,.12)!important;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;margin:6px 0 8px}
+.listen:hover{transform:translateY(-1px);box-shadow:0 18px 46px rgba(0,0,0,.6),0 0 42px rgba(217,188,134,.2)!important}
+.lav{position:relative;width:64px;height:64px;flex:none}
+.lav img{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:50% 18%;border:2px solid var(--gold,#D9BC86);box-shadow:0 0 0 4px rgba(217,188,134,.14),0 6px 18px rgba(0,0,0,.6);display:block}
+.listen .lav .play{position:absolute;right:-4px;bottom:-4px;width:28px!important;height:28px!important;box-shadow:0 0 0 3px #0B0A09!important}
+.listen .lav .play svg{width:11px;height:11px}
+.listen .ic-pause{display:none}.listen.on .ic-pause{display:block}.listen.on .ic-play{display:none}
+.listen.on .lav img{animation:lavPulse 1.8s ease-in-out infinite}
+@keyframes lavPulse{0%,100%{box-shadow:0 0 0 4px rgba(217,188,134,.14),0 6px 18px rgba(0,0,0,.6)}50%{box-shadow:0 0 0 8px rgba(217,188,134,.28),0 6px 18px rgba(0,0,0,.6)}}
+.listen-txt{gap:3px}
+.listen-txt .lk{font-style:normal;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold,#D9BC86)}
+.listen-txt b{font-size:20px!important;line-height:1.15}
+.listen-txt .lsub{color:#CFC6B8!important;letter-spacing:.06em!important;text-transform:none!important;font-size:12px!important}
+@media (max-width:480px){.listen .wave{display:none}.listen{grid-template-columns:auto minmax(0,1fr)!important}}
+@media (prefers-reduced-motion:reduce){.listen.on .lav img{animation:none}}
 </style>
 </head>
 <body>
@@ -1468,8 +1487,8 @@ var VOICE_SRC={"faith":"/audio/faith.mp3","healing":"/audio/healing.mp3","wisdom
 var voice=null, voiceBtn=null;
 function stopVoice(){ if(voice){ try{voice.pause();}catch(e){} } if(voiceBtn){ voiceBtn.classList.remove("on"); voiceBtn.setAttribute("aria-pressed","false"); var sb=voiceBtn.querySelector(".lsub"); if(sb) sb.textContent=sb.getAttribute("data-idle"); } voice=null; voiceBtn=null; }
 function listenHTML(sub){ return '<button class="listen" type="button" id="listen" aria-pressed="false">'+
-  '<span class="play"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="currentColor"/></svg></span>'+
-  '<span class="listen-txt"><b>Hear Crystal read this</b><span class="lsub" id="listenSub" data-idle="'+sub+'">'+sub+'</span></span>'+
+  '<span class="lav"><img src="crystal.jpg" alt="" width="64" height="64"><span class="play"><svg class="ic-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="currentColor"/></svg><svg class="ic-pause" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 2 H5.6 V12 H3 Z M8.4 2 H11 V12 H8.4 Z" fill="currentColor"/></svg></span></span>'+
+  '<span class="listen-txt"><em class="lk">In her own voice</em><b>Hear Crystal read this</b><span class="lsub" id="listenSub" data-idle="'+sub+'">'+sub+'</span></span>'+
   '<span class="wave" aria-hidden="true">'+(function(){var o="";for(var i=0;i<14;i++){o+='<i style="height:'+(6+Math.round(Math.abs(Math.sin(i*1.7))*16))+'px;animation-delay:'+(i*.07)+'s"></i>';}return o;})()+'</span></button>'; }
 function fmtT(t){ t=Math.max(0,Math.round(t||0)); return Math.floor(t/60)+":"+("0"+(t%60)).slice(-2); }
 function wireListen(file){
