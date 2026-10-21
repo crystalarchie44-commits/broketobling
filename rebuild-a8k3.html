@@ -1935,20 +1935,17 @@ function renderCard(){
   });
 }
 
-/* ---------- Soft music (generated, gentle pad) ---------- */
+/* ---------- Soft music: "Christian Instrumental Piano Worship" by JesseQuinnMedia (Pixabay Content License) ---------- */
 var music=null;
 function startMusic(){
-  var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
-  var ctx=new AC(), master=ctx.createGain(); master.gain.value=0; master.connect(ctx.destination);
-  var lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=1100; lp.connect(master);
-  var dl=ctx.createDelay(); dl.delayTime.value=.42; var fb=ctx.createGain(); fb.gain.value=.38; dl.connect(fb); fb.connect(dl); dl.connect(lp);
-  var chords=[[146.83,220,293.66,369.99],[123.47,185,246.94,293.66],[98,146.83,196,246.94],[110,164.81,220,277.18]], ci=0;
-  function play(){ var now=ctx.currentTime, len=9; chords[ci%4].forEach(function(f,k){ [0,1].forEach(function(d){ var o=ctx.createOscillator(), gn=ctx.createGain(); o.type=d?"triangle":"sine"; o.frequency.value=f*(d?1.003:1); gn.gain.setValueAtTime(0,now); gn.gain.linearRampToValueAtTime(.05/(k+1.2),now+3); gn.gain.linearRampToValueAtTime(0,now+len+2); o.connect(gn); gn.connect(lp); gn.connect(dl); o.start(now); o.stop(now+len+2.2); }); }); ci++; }
-  play(); var iv=setInterval(play,8000);
-  master.gain.linearRampToValueAtTime(.55,ctx.currentTime+2.5);
-  music={ctx:ctx,master:master,iv:iv}; return true;
+  try{
+    var a=new Audio("/audio/music.mp3"); a.loop=true; a.preload="auto"; a.volume=0;
+    var p=a.play(); if(p&&p.catch) p.catch(function(){ if(music&&music.a===a){ music=null; var mb=document.getElementById("musicBtn"); if(mb){ mb.setAttribute("aria-pressed","false"); mb.setAttribute("aria-label","Play soft music"); } } });
+    var v=0, iv=setInterval(function(){ v=Math.min(.35,v+.02); a.volume=v; if(v>=.35) clearInterval(iv); },120);
+    music={a:a,iv:iv}; return true;
+  }catch(e){ return false; }
 }
-function stopMusic(){ if(!music) return; var m=music; music=null; clearInterval(m.iv); m.master.gain.linearRampToValueAtTime(0,m.ctx.currentTime+1.2); setTimeout(function(){try{m.ctx.close();}catch(e){}},1400); }
+function stopMusic(){ if(!music) return; var m=music; music=null; clearInterval(m.iv); var a=m.a, v=a.volume, iv=setInterval(function(){ v=Math.max(0,v-.03); a.volume=v; if(v<=0){ clearInterval(iv); try{a.pause();}catch(e){} } },80); }
 document.getElementById("musicBtn").addEventListener("click",function(){
   var b=this; if(music){ stopMusic(); b.setAttribute("aria-pressed","false"); b.setAttribute("aria-label","Play soft music"); }
   else if(startMusic()){ b.setAttribute("aria-pressed","true"); b.setAttribute("aria-label","Pause soft music"); toast("Soft music on","round"); }
