@@ -23,6 +23,14 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* Larger text: scale every page in the app, not just a few elements */
 body.big #app{zoom:1.15}
+
+/* Readability pass: keep the hallway mood but never let its light streaks sit behind text */
+body:not(.on-home) .scene .vignette{background:linear-gradient(90deg,rgba(5,4,4,.8),rgba(5,4,4,.93) 14%,rgba(5,4,4,.95) 50%,rgba(5,4,4,.93) 86%,rgba(5,4,4,.8))!important}
+@media (max-width:700px){body:not(.on-home) .scene .vignette{background:rgba(5,4,4,.9)!important}}
+.chip,.rchip,.seg button,.txt,#app textarea,#app input[type=email],#app input[type=text],.tile{background:rgba(11,10,9,.94)!important}
+.rchip[aria-pressed="true"],.rchip[aria-checked="true"],.chip[aria-checked="true"],.seg button[aria-checked="true"]{background:linear-gradient(rgba(217,188,134,.14),rgba(217,188,134,.14)),rgba(11,10,9,.96)!important}
+.qh,.head p,.hint-line,.note,.saved-hint,.prefs .qh{color:#DCD3C4!important}
+#app h2,#app h3,.ql,.qh,.head p{text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 18px rgba(0,0,0,.9)}
 </style>
 <meta name="robots" content="noindex">
 <script>(function(){try{var q=location.search,ok=/[?&]access=/.test(q)||!!localStorage.getItem("bling-access")||!!localStorage.getItem("bling-declarations-v2")||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
