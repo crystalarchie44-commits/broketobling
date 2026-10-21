@@ -959,8 +959,8 @@ body:not(.on-home) .scene .vignette{background:linear-gradient(90deg,rgba(5,4,4,
 @media (prefers-reduced-motion:reduce){.sv-screen .sv-me{animation:none}}
 .invite .ctc-more{display:block;margin-top:14px;color:#F3DFAE;font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:4px}.invite .ctc-note{display:block;margin-top:6px;font-size:13px;color:#C9C0B2}
 .req-err{text-align:center;margin:0 0 6px;font-size:14px}.q.q-miss{animation:qmiss 1.6s ease}@keyframes qmiss{0%,60%{box-shadow:0 0 0 2px rgba(240,160,138,.75);border-radius:14px}100%{box-shadow:0 0 0 0 transparent}}
-#app{padding-bottom:20px!important}.app-credit{position:relative;z-index:2;max-width:560px;margin:0 auto;text-align:center;font:12.5px/1.8 var(--ui,system-ui,sans-serif);color:#B9AFA0;padding:14px 20px 64px;border-top:1px solid rgba(217,188,134,.12)}.app-credit .cby{display:block;white-space:nowrap}.app-credit .hrt{color:#D9BC86}.app-credit b{color:#F3DFAE;font-weight:600}.app-credit a{color:#D9BC86;text-decoration:underline;text-underline-offset:3px}body.has-tabs .app-credit{padding-bottom:120px}body.has-pager .app-credit{padding-bottom:210px}
-body.on-home .app-credit{display:none}.home-credit{position:relative;z-index:2;margin:10px 0 0;text-align:center;font-size:12px;line-height:1.8;color:#CFC6B8;text-shadow:0 1px 8px rgba(0,0,0,.9)}.home-credit .hrt{color:#D9BC86}.home-credit b{color:#F3DFAE;font-weight:600}.home-credit a{color:#F3DFAE;text-decoration:underline;text-underline-offset:3px}
+.app-credit{position:relative;z-index:2;max-width:560px;margin:0 auto;text-align:center;font:12.5px/1.8 var(--ui,system-ui,sans-serif);color:#B9AFA0;padding:14px 20px 64px;border-top:1px solid rgba(217,188,134,.12)}.app-credit .cby{display:block;white-space:nowrap}.app-credit .hrt{color:#D9BC86}.app-credit b{color:#F3DFAE;font-weight:600}.app-credit a{color:#D9BC86;text-decoration:underline;text-underline-offset:3px}body.has-tabs .app-credit{padding-bottom:120px}body.has-pager .app-credit{padding-bottom:210px}
+body.on-home .app-credit{display:none}.home-credit{position:relative;z-index:2;margin:28px 0 0;text-align:center;font-size:11px;line-height:1.7;color:rgba(207,198,184,.7);text-shadow:0 1px 8px rgba(0,0,0,.9)}.home-credit .hrt{color:#D9BC86}.home-credit b{color:rgba(243,223,174,.85);font-weight:600}.home-credit a{color:rgba(217,188,134,.85);text-decoration:underline;text-underline-offset:3px}
 </style>
 </head>
 <body>
@@ -986,7 +986,6 @@ body.on-home .app-credit{display:none}.home-credit{position:relative;z-index:2;m
 </header>
 
 <main class="wrap" id="app"></main>
-<div class="app-credit"><span class="cby">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b></span><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></div>
 
 <div class="drawer" id="navDrawer" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="navTitle">
@@ -1311,7 +1310,6 @@ function home(){
     '<button class="btn begin-btn" type="button" data-go="start">'+(state.prefs&&state.name?'Continue, '+nm():'Begin')+'</button>'+
     '<p class="note"><em>Look for your diamonds.</em>Each area of life holds one. As you pray through a section or keep a declaration, its diamond lights up.</p>'+
     '<p class="foot">With Crystal · Broke to B.L.I.N.G.</p>'+
-    '<p class="home-credit">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b><br><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></p>'+
   '</section>';
   var hm=app.querySelector(".home"); if(hm){ hm.style.setProperty("--d0", document.getElementById("splash")?"1.75s":".15s"); }
   initGem3D();
@@ -1406,7 +1404,7 @@ function personalize(){
   });
   var sk=document.getElementById("skipPrefs");
   if(sk) sk.addEventListener("click",function(){state.prefs=true; if(shortForm){state.onboarded=true;state.installSeen=true;} persist(); go(shortForm?"welcome":"letter");});
-  if(!first){ var lk=document.createElement("div"); lk.className="prefs-links"; lk.innerHTML='<button class="btn ghost" type="button" data-go="research">Help shape what comes next</button><button class="btn ghost" type="button" data-go="install">How to add this to your home screen</button>'; app.querySelector(".screen").appendChild(lk); }
+  if(!first){ var lk=document.createElement("div"); lk.className="prefs-links"; lk.innerHTML='<button class="btn ghost" type="button" data-go="research">Help shape what comes next</button><button class="btn ghost" type="button" data-go="install">How to add this to your home screen</button>'; app.querySelector(".screen").appendChild(lk); var cr=document.createElement("div"); cr.innerHTML=creditHTML(); app.querySelector(".screen").appendChild(cr.firstChild); }
 }
 /* ---------- Research step (optional) ---------- */
 /* Supabase: answers and signups go to the bling_responses table (insert-only for visitors) */
@@ -1530,6 +1528,7 @@ function backPage(){
       '<span class="bp-next">'+esc(next.name)+'</span>'+
       '<button class="btn ghost" type="button" data-sec="'+tw.s.id+'">Today’s declaration</button>'+
       '<button class="skip" type="button" data-go="welcome">Go to Home</button></div>'+
+      creditHTML()+
   '</section>';
 }
 var VOICE_SRC={"faith":"/audio/faith.mp3","healing":"/audio/healing.mp3","wisdom":"/audio/wisdom.mp3","family":"/audio/family.mp3","health":"/audio/health.mp3","finances":"/audio/finances.mp3","calling":"/audio/calling.mp3","protection":"/audio/protection.mp3","perseverance":"/audio/perseverance.mp3","legacy":"/audio/legacy.mp3","bling":"/audio/bling.mp3","letter":"/audio/letter.mp3"};
@@ -1653,6 +1652,7 @@ function todaysWord(){
   return {s:sec,i:(seed*7+3)%7};
 }
 function greeting(){ var h=new Date().getHours(); return h<12?"Good morning":(h<17?"Good afternoon":"Good evening"); }
+function creditHTML(){ return '<p class="home-credit">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b><br><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></p>'; }
 function welcome(){
   var tw=todaysWord(), showIns=!isStandalone()&&!state.installSeen;
   app.innerHTML='<section class="screen">'+
@@ -1679,6 +1679,7 @@ function welcome(){
      '</div>'+
    '</article>'+
    '<div class="sec-foot"><button class="btn" type="button" data-go="choose">Choose where to begin</button></div>'+
+   creditHTML()+
   '</section>';
   var ix=document.getElementById("insX"); if(ix) ix.addEventListener("click",function(){state.installSeen=true; persist(); document.getElementById("insCard").remove();});
 }
