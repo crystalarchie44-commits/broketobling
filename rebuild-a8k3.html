@@ -984,7 +984,7 @@ var SECTIONS = [
    "I release the pressure to become who I used to be. God is doing something new in me.",
    "I believe before the evidence because the One who promised is faithful."],
   prayer:"Father, meet me in this new beginning. Remind me that my past does not erase Your love or cancel my calling. Give me grace for today, courage for the next step, and faith to believe You are still writing my story. In Jesus’ name, amen."},
- {id:"healing", no:"02", name:"Emotional Healing, Peace & Courage", cut:"pear",
+ {id:"healing", no:"02", name:"Emotional Healing, Forgiveness, Peace & Courage", cut:"pear",
   intro:"God is not frightened by the truth of what you feel. You can grieve what was and still believe that hope will return.",
   ref:"Psalm 34:18", verse:"The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.",
   refs:"Psalm 34:18 · Psalm 23:4 · Isaiah 41:10 · Philippians 4:6–7 · 1 Peter 5:7",
@@ -1594,7 +1594,7 @@ function section(id){
      '<div class="sit"><span class="label">Scripture to sit with</span><p>'+esc(s.refs)+'</p></div>'+
      '<div><span class="label">Prayer</span><p class="prayer">'+esc(s.prayer)+'</p></div>'+
      '<div class="reflect"><span class="label">Reflection</span>'+
-       '<label for="reflect-'+s.id+'">'+(state.name?nm()+', what':'What')+' is one faithful step I can take today?</label>'+
+       '<label for="reflect-'+s.id+'">'+esc(REFLECT[s.id]||"What is one faithful step I can take today?")+'</label>'+
        '<textarea id="reflect-'+s.id+'" placeholder="Write it down. Small is still faithful.">'+esc(state.reflect[s.id]||"")+'</textarea>'+
        '<span class="saved-hint" id="hint"></span></div>'+
    '</article>'+
@@ -1672,7 +1672,7 @@ function finale(){
       '<span class="ctc-pill">Waitlist now open</span>'+
       '<span class="eyebrow">Coming soon</span>'+
       '<h3 class="ctc-title">Called to Create</h3>'+
-      '<p class="ctc-lede">How I grew my Instagram to 600K followers without ads, through faith-based content.</p>'+
+      '<p class="ctc-lede">How I grew to over 800,000 followers across all social media platforms without ads, through faith-based content.</p>'+
       '<ul class="ctc-list"><li>'+gem("round")+'<span>Share your faith and your story with confidence</span></li><li>'+gem("round")+'<span>Grow an audience with integrity, no paid ads</span></li><li>'+gem("round")+'<span>Create content that points people back to Him</span></li></ul>'+
       '<div class="field"><input id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address"><button class="btn" type="submit">Join the waitlist</button></div>'+
       '<span class="form-msg" id="formMsg"></span>'+
@@ -1694,6 +1694,10 @@ function finale(){
 }
 
 /* ---------- Saved drawer ---------- */
+var REFLECT={"faith": "What part of my past do I need to stop letting define me?", "healing": "What are you still carrying from what happened, and what might it look like to begin placing that pain in God’s hands as you take a step toward forgiveness?", "wisdom": "Where do I need to pause, pray, and ask God for wisdom before I move forward?", "family": "Who in my life needs more grace from me, and how can I show it this week?", "health": "Where do I need God’s strength, comfort, or peace most right now?", "finances": "What is one honest, wise choice I can make with the resources I have today?", "calling": "What gift, idea, or opportunity in my hands can I begin using now?", "protection": "What worry can I place in God’s hands so I can welcome more peace into my home today?", "perseverance": "What is one faithful step I can take today?", "legacy": "Who can I encourage, serve, or bless with what God has placed in my hands?"};
+var JB_Q={"faith": "What are you believing God for in this new beginning?", "healing": "What do you need to release to God as you make room for hope and forgiveness?", "wisdom": "Where are you asking God to show you the next right step?", "family": "What relationship or situation in your family would you like to place in God’s hands?", "health": "Where do you need God to strengthen or sustain you today?", "finances": "What financial concern are you asking God to meet with wisdom and provision?", "protection": "What worry about your home, loved ones, or daily life can you entrust to God?", "perseverance": "What would help you keep going through this season, one day at a time?", "legacy": "What do you hope the people around you will carry forward because of the way you live?"};
+function jbPrompt(sec,i){ var s=byId(sec); if(sec==="faith"&&s&&/^I am not defined by my hardest season/.test(s.decl[i]||"")) return "What truth do you want to remember when your past tries to define you?"; return JB_Q[sec]||"What are you believing God for?"; }
+
 var drawer=document.getElementById("drawer");
 function fmtDate(t){ try{ return new Date(t).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }catch(e){ return ""; } }
 function openMine(){
@@ -1703,7 +1707,7 @@ function openMine(){
     return '<div class="jewel-item'+(n.answered?' answered':'')+'" data-k="'+k+'">'+
       '<div class="ji-top">'+gem(s.cut,'class="lit"')+'<small>'+esc(s.name)+'</small>'+(n.answered?'<span class="ans">Answered · '+fmtDate(n.answered)+'</span>':'')+'</div>'+
       '<p>'+esc(s.decl[x.i])+'</p>'+
-      '<textarea class="ji-note" rows="2" placeholder="What are you believing God for?" aria-label="Note for this declaration">'+esc(n.note||'')+'</textarea>'+
+      '<textarea class="ji-note" rows="2" placeholder="'+esc(jbPrompt(x.sec,x.i))+'" aria-label="Note for this declaration">'+esc(n.note||'')+'</textarea>'+
       '<button type="button" class="ji-ans">'+(n.answered?'Undo answered':'Mark as answered')+'</button></div>';}).join("");}
   document.getElementById("mineTitle").textContent=state.name?state.name+"’s Diamonds":"My Diamonds";
   drawer.hidden=false; document.getElementById("closeMine").focus();
