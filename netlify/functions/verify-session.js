@@ -18,7 +18,7 @@ exports.handler = async (event) => {
 
   const paid = s.payment_status === "paid";
   const email = (s.customer_details && s.customer_details.email) || s.customer_email || null;
-  const name = (s.customer_details && s.customer_details.name) || null;
+  const name = (s.metadata && s.metadata.first_name) || (s.customer_details && s.customer_details.name) || null;
   const kind = (s.metadata && s.metadata.kind) === "gift" ? "gift" : "product";
 
   if (paid) {
@@ -29,5 +29,5 @@ exports.handler = async (event) => {
       body: JSON.stringify({ kind: "purchase", email, name: name ? String(name).slice(0, 60) : null, amount_cents: s.amount_total, ref: s.id, focus: kind === "gift" ? "Gift (Sow a Seed)" : "Pay what you want" }),
     }).catch(() => {});
   }
-  return { statusCode: 200, headers, body: JSON.stringify({ paid, kind, amount: s.amount_total, email }) };
+  return { statusCode: 200, headers, body: JSON.stringify({ paid, kind, amount: s.amount_total, email, name: (s.metadata && s.metadata.first_name) || null }) };
 };

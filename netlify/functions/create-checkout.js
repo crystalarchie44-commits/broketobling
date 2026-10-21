@@ -36,6 +36,8 @@ exports.handler = async (event) => {
   p.append("cancel_url", SITE + "/" + (gift ? "?give=1" : ""));
   p.append("submit_type", gift ? "donate" : "pay");
   p.append("metadata[kind]", gift ? "gift" : "product");
+  const firstName = String(data.name || "").trim().slice(0, 60);
+  if (firstName) p.append("metadata[first_name]", firstName);
   if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) p.append("customer_email", email);
 
   const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
