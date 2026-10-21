@@ -73,26 +73,18 @@ h1{font-size:30px}
 
   <section id="loginView" class="card login" hidden>
     <span class="eyebrow">Admin</span>
-    <h1>Sign in</h1>
-    <p class="muted" style="margin:0">Enter your admin email. We’ll send you a secure sign-in link, no password needed.</p>
+    <h1>Enter password</h1>
     <form id="loginForm" style="display:grid;gap:12px">
-      <input id="loginEmail" type="email" placeholder="you@email.com" autocomplete="email" required>
-      <button class="btn" type="submit">Email me a sign-in link</button>
+      <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button class="btn" type="submit">Open the dashboard</button>
     </form>
     <div id="loginMsg" class="msg" role="status"></div>
-  </section>
-
-  <section id="deniedView" class="card login" hidden>
-    <span class="eyebrow">Admin</span>
-    <h1>No access yet</h1>
-    <p class="muted" style="margin:0">You’re signed in, but this email isn’t on the admin list.</p>
-    <button class="btn ghost" type="button" data-signout>Sign out</button>
   </section>
 
   <section id="dataView" hidden>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px">
       <div><span class="eyebrow">Admin</span><h1>Sign-ups and responses</h1></div>
-      <button class="btn ghost" type="button" data-signout>Sign out</button>
+      <button class="btn ghost" type="button" data-signout>Lock</button>
     </div>
     <div class="stats">
       <div class="card stat"><b id="sTotal">0</b><span>Total entries</span></div>
@@ -130,15 +122,17 @@ h1{font-size:30px}
   </section>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 (function(){
   var SB_URL="https://ukneifazkwdjljswxoab.supabase.co", SB_KEY="sb_publishable_45MaLGTuGjW493HuzgwQ5w_YFossgrZ";
-  var sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true,flowType:"implicit"}});
+  var PW_KEY="bling-admin-pw";
+  function getPw(){ try{ return sessionStorage.getItem(PW_KEY)||""; }catch(e){ return ""; } }
+  function setPw(v){ try{ if(v) sessionStorage.setItem(PW_KEY,v); else sessionStorage.removeItem(PW_KEY); }catch(e){} }
+  function fetchRows(pw){ return fetch(SB_URL+"/rest/v1/rpc/admin_responses",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_password:pw})}).then(function(r){ return r.json(); }); }
   var $=function(id){return document.getElementById(id);};
   var all=[], kind="all";
   var LABEL={waitlist:"Waitlist",research:"Profile",signup:"Email list",download:"Download",purchase:"Payment"};
-  function show(v){ ["loginView","deniedView","dataView"].forEach(function(id){ $(id).hidden=(id!==v); }); }
+  function show(v){ ["loginView","dataView"].forEach(function(id){ $(id).hidden=(id!==v); }); }
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
   function fmt(t){ try{ return new Date(t).toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"}); }catch(e){ return t; } }
   function tags(a){ return (a&&a.length)?'<div class="tags">'+a.map(function(x){return '<i>'+esc(x)+'</i>';}).join("")+'</div>':'<span class="muted">—</span>'; }
@@ -173,10 +167,10 @@ h1{font-size:30px}
   }
   function load(){
     $("dataMsg").textContent="Loading…"; $("dataMsg").className="msg";
-    return sb.from("bling_responses").select("*").order("created_at",{ascending:false}).limit(5000).then(function(res){
-      if(res.error){ $("dataMsg").textContent="Couldn’t load: "+res.error.message; $("dataMsg").className="msg err"; return; }
-      all=res.data||[]; $("dataMsg").textContent="Updated "+new Date().toLocaleTimeString(); render();
-    });
+    return fetchRows(getPw()).then(function(j){
+      if(!j||!j.ok){ setPw(""); show("loginView"); $("loginMsg").className="msg err"; $("loginMsg").textContent=(j&&j.error)||"Please sign in again."; return; }
+      all=j.rows||[]; $("dataMsg").textContent="Updated "+new Date().toLocaleTimeString(); render();
+    }).catch(function(){ $("dataMsg").textContent="Couldn’t load. Check your connection and tap Refresh."; $("dataMsg").className="msg err"; });
   }
   function csv(){
     var cols=["created_at","kind","name","email","amount_cents","focus","season","skills","learn"];
@@ -184,31 +178,22 @@ h1{font-size:30px}
     var blob=new Blob([lines.join("\n")],{type:"text/csv"}), a=document.createElement("a");
     a.href=URL.createObjectURL(blob); a.download="broke-to-bling-"+new Date().toISOString().slice(0,10)+".csv"; document.body.appendChild(a); a.click(); a.remove();
   }
-  function enter(session){
-    if(!session){ $("who").textContent=""; show("loginView"); return; }
-    $("who").textContent=session.user.email;
-    sb.from("bling_admins").select("email").limit(1).then(function(r){
-      if(r.error||!r.data||!r.data.length){ show("deniedView"); return; }
-      show("dataView"); load();
-    });
-  }
   $("loginForm").addEventListener("submit",function(e){
     e.preventDefault();
-    var em=$("loginEmail").value.trim(), btn=this.querySelector("button"), m=$("loginMsg");
-    btn.disabled=true; m.className="msg"; m.textContent="Sending…";
-    sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+"/admin.html"}}).then(function(r){
+    var pw=$("pw").value, btn=this.querySelector("button"), m=$("loginMsg");
+    btn.disabled=true; m.className="msg"; m.textContent="Checking…";
+    fetchRows(pw).then(function(j){
       btn.disabled=false;
-      if(r.error){ m.className="msg err"; m.textContent=r.error.message; return; }
-      m.className="msg ok"; m.textContent="Check your inbox for the sign-in link. Open it on this device.";
-    });
+      if(!j||!j.ok){ m.className="msg err"; m.textContent=(j&&j.error)||"That didn’t work. Try again."; return; }
+      setPw(pw); $("pw").value=""; m.textContent=""; all=j.rows||[]; show("dataView"); $("dataMsg").textContent="Updated "+new Date().toLocaleTimeString(); render();
+    }).catch(function(){ btn.disabled=false; m.className="msg err"; m.textContent="Couldn’t connect. Check your connection and try again."; });
   });
-  document.querySelectorAll("[data-signout]").forEach(function(b){ b.addEventListener("click",function(){ sb.auth.signOut().then(function(){ enter(null); }); }); });
+  document.querySelectorAll("[data-signout]").forEach(function(b){ b.addEventListener("click",function(){ setPw(""); all=[]; $("rows").innerHTML=""; show("loginView"); $("pw").focus(); }); });
   document.querySelectorAll(".tab").forEach(function(t){ t.addEventListener("click",function(){ kind=t.getAttribute("data-k"); document.querySelectorAll(".tab").forEach(function(o){o.setAttribute("aria-pressed",String(o===t));}); render(); }); });
   $("q").addEventListener("input",render);
   $("refresh").addEventListener("click",load);
   $("csv").addEventListener("click",csv);
-  sb.auth.getSession().then(function(r){ enter(r.data.session); });
-  sb.auth.onAuthStateChange(function(ev,session){ if(ev==="SIGNED_IN"){ if(location.hash) history.replaceState(null,"",location.pathname); enter(session); } });
+  if(getPw()){ show("dataView"); load(); } else { show("loginView"); $("pw").focus(); }
 })();
 </script>
 </body>
