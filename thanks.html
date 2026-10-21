@@ -4,60 +4,118 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Thank you · Broke to B.L.I.N.G.</title>
+<title>Welcome · Broke to B.L.I.N.G.</title>
 <meta name="theme-color" content="#070605">
 <link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&family=Pinyon+Script&family=Caveat:wght@600&display=swap">
 <style>
-:root{--void:#070605;--line:rgba(217,188,134,.26);--gold:#D9BC86;--gold2:#F3DFAE;--gold3:#B98A45;--ivory:#F7F1E6;--mist:#B9AFA0;--display:"Playfair Display",Georgia,serif;--ui:"Montserrat",system-ui,sans-serif}
+:root{--void:#070605;--line:rgba(217,188,134,.26);--gold:#D9BC86;--gold2:#F3DFAE;--gold3:#B98A45;--ivory:#F7F1E6;--mist:#B9AFA0;--display:"Playfair Display",Georgia,serif;--ui:"Montserrat",system-ui,sans-serif;--script:"Pinyon Script","Snell Roundhand",cursive;--hand:"Caveat","Bradley Hand",cursive}
 *{box-sizing:border-box}[hidden]{display:none!important}
-html,body{margin:0;min-height:100%;background:radial-gradient(900px 500px at 50% 0%,rgba(217,188,134,.1),transparent 60%),var(--void);color:var(--ivory);font:15.5px/1.65 var(--ui);-webkit-font-smoothing:antialiased}
-.wrap{max-width:520px;margin:0 auto;padding:28px 16px 48px;text-align:center;display:grid;gap:18px;justify-items:center}
-.logo{height:52px;width:auto}
-.gem{width:84px;filter:drop-shadow(0 0 22px rgba(243,223,174,.5));animation:pop .8s cubic-bezier(.2,.8,.2,1.2) both;margin-top:18px}
+html,body{margin:0;min-height:100%;font-variant-numeric:lining-nums;background:radial-gradient(900px 500px at 50% 0%,rgba(217,188,134,.12),transparent 60%),var(--void);color:var(--ivory);font:15.5px/1.65 var(--ui);-webkit-font-smoothing:antialiased}
+.wrap{max-width:540px;margin:0 auto;padding:24px 16px 56px;text-align:center;display:grid;gap:18px;justify-items:center}
+.logo{height:50px;width:auto}
+.gem{width:80px;filter:drop-shadow(0 0 22px rgba(243,223,174,.5));animation:pop .8s cubic-bezier(.2,.8,.2,1.2) both;margin-top:10px}
 .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
-h1{font-family:var(--display);font-weight:500;font-size:clamp(30px,7vw,40px);line-height:1.15;margin:0}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(32px,8vw,44px);line-height:1.12;margin:0;background:linear-gradient(180deg,#FFF8E6,#D9BC86);-webkit-background-clip:text;background-clip:text;color:transparent}
 p{margin:0;color:#E8E0D2}
+.lead{font-size:16.5px;max-width:440px}
 .verse{font-family:var(--display);font-style:italic;color:var(--gold2);font-size:17px}
-.btn{display:block;width:100%;max-width:360px;border-radius:8px;padding:15px 18px;font:600 15px var(--ui);text-decoration:none;color:#140F08;background:linear-gradient(135deg,var(--gold2),var(--gold) 55%,var(--gold3));box-shadow:0 10px 30px rgba(217,188,134,.2)}
-.small{font-size:12.5px;color:var(--mist)}
-.note-card{position:relative;text-align:left;border:1px solid var(--line);border-radius:12px;padding:46px 20px 18px;margin-top:30px;background:linear-gradient(180deg,rgba(217,188,134,.08),rgba(0,0,0,0));display:grid;gap:10px}
-.note-card img{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:60px;height:60px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:2px solid var(--gold)}
-.note-card p{font-size:15px;line-height:1.7;color:#EDE5D7}
-.note-card .sig{font-family:var(--display);font-style:italic;font-size:22px;color:var(--gold2);justify-self:end}
+.btn{display:block;width:100%;max-width:380px;border-radius:10px;padding:17px 18px;font:600 16px var(--ui);text-decoration:none;color:#140F08;background:linear-gradient(135deg,var(--gold2),var(--gold) 55%,var(--gold3));box-shadow:0 12px 34px rgba(217,188,134,.25);animation:glow 2.6s ease-in-out infinite}
+.small{font-size:13px;color:var(--mist)}
+.steps{width:100%;max-width:420px;text-align:left;border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:rgba(13,11,10,.9);display:grid;gap:8px}
+.steps b{font-family:var(--display);font-weight:500;font-size:18px;color:#FFFCF6}
+.steps p{font-size:14px;color:#DCD3C4}
+
+/* Crystal's letter */
+.letter{position:relative;width:100%;text-align:left;background:#F7F1E6;color:#2A2118;border-radius:6px;padding:40px 26px 26px;margin-top:34px;box-shadow:0 30px 70px rgba(0,0,0,.6);transform:rotate(-.6deg);animation:rise .9s ease .2s both}
+.letter::before{content:"";position:absolute;inset:9px;border:1px solid rgba(169,123,59,.35);border-radius:4px;pointer-events:none}
+.letter .face{position:absolute;top:-34px;left:50%;transform:translateX(-50%);width:68px;height:68px;border-radius:50%;object-fit:cover;object-position:50% 18%;border:3px solid #D9BC86;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.letter .hi{font-family:var(--script);font-size:40px;color:#8A6430;line-height:1.1;margin:6px 0 10px}
+.letter p{font-family:var(--display);font-size:17px;line-height:1.75;color:#3A2E22;margin-bottom:12px}
+.letter .gift{display:inline-block;font-family:var(--ui);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6B5233;background:rgba(217,188,134,.35);padding:5px 10px;border-radius:999px;margin-bottom:12px}
+.letter .sig{display:block;font-family:var(--script);font-size:50px;color:#8A6430;line-height:1;margin-top:4px}
+.letter .ps{font-family:var(--hand);font-size:22px;color:#6B5233;margin-top:8px;margin-bottom:0}
+.welcome-note{width:100%;max-width:440px;display:flex;gap:14px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:linear-gradient(180deg,rgba(217,188,134,.08),rgba(13,11,10,.9))}
+.welcome-note img{width:54px;height:54px;border-radius:50%;object-fit:cover;object-position:50% 18%;border:2px solid var(--gold);flex:none}
+.welcome-note p{font-size:14.5px;color:#EDE5D7;line-height:1.55}
+.welcome-note span{font-family:var(--script);font-size:26px;color:var(--gold2);line-height:1}
 @keyframes pop{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(18px) rotate(-.6deg)}to{opacity:1;transform:rotate(-.6deg)}}
+@keyframes glow{0%,100%{box-shadow:0 12px 34px rgba(217,188,134,.22)}50%{box-shadow:0 12px 44px rgba(243,223,174,.42)}}
+@media (prefers-reduced-motion:reduce){.gem,.letter,.btn{animation:none}}
 </style>
 </head>
 <body>
 <main class="wrap">
   <a href="/"><img class="logo" src="logo.png" alt="Broke to B.L.I.N.G. Declarations"></a>
-  <img class="gem" src="diamond.png" alt="">
-  <span class="eyebrow" id="eyebrow">Payment received</span>
-  <h1 id="title">Thank you</h1>
-  <p id="text">A receipt is on its way to your inbox.</p>
-  <div class="note-card" id="crystalNote">
-    <img src="crystal.jpg" alt="Crystal">
-    <p>Thank you so much for supporting Broke to B.L.I.N.G. Your generosity means so much to me. You’re helping bring me one step closer to returning to Africa to continue the work of The Treasured Foundation, the nonprofit I founded. We work alongside families in Ethiopia who are facing deep poverty and need safe homes, opportunities to earn a living, and hope for a brighter future.</p>
-    <p>Your support helps move this mission forward, and I’m truly grateful you’re part of it. 🤍✨</p>
-    <span class="sig">Crystal</span>
-  </div>
-  <p class="verse">“God loveth a cheerful giver.” 2 Corinthians 9:7</p>
-  <a class="btn" href="/rebuild-a8k3" id="open">Open the declarations</a>
-  <p class="small" id="small">Tip: add the app to your home screen so it is always one tap away.</p>
+
+  <!-- Free download -->
+  <section id="free" hidden style="display:grid;gap:18px;justify-items:center;width:100%">
+    <img class="gem" src="diamond.png" alt="">
+    <span class="eyebrow">You’re in</span>
+    <h1 id="freeTitle">Welcome!</h1>
+    <p class="lead">Your Broke to B.L.I.N.G. Declarations are ready. Tap below to open them and hear Crystal read every one.</p>
+    <a class="btn" href="/rebuild-a8k3">Open my declarations</a>
+    <div class="welcome-note"><img src="crystal.jpg" alt="Crystal"><div><p>I’m so glad you’re here. Take your time, speak these over your life, and come back whenever you need them.</p><span>Crystal</span></div></div>
+    <div class="steps"><b>Keep it one tap away</b><p>Once it opens, the app will show you how to save it to your phone’s home screen, so you can come back to it anytime.</p></div>
+  </section>
+
+  <!-- Paid / gift -->
+  <section id="paid" hidden style="display:grid;gap:18px;justify-items:center;width:100%">
+    <img class="gem" src="diamond.png" alt="">
+    <span class="eyebrow" id="eyebrow">Thank you</span>
+    <h1 id="title">Thank you!</h1>
+    <p class="lead" id="text">Crystal has a note for you.</p>
+    <article class="letter" aria-label="A thank-you note from Crystal">
+      <img class="face" src="crystal.jpg" alt="Crystal">
+      <div class="hi" id="hi">Thank you, friend</div>
+      <span class="gift" id="giftTag" hidden></span>
+      <p>Thank you so much for supporting Broke to B.L.I.N.G. Your generosity means so much to me. You’re helping bring me one step closer to returning to Africa to continue the work of The Treasured Foundation, the nonprofit I founded. We work alongside families in Ethiopia who are facing deep poverty and need safe homes, opportunities to earn a living, and hope for a brighter future.</p>
+      <p>Your support helps move this mission forward, and I’m truly grateful you’re part of it. 🤍✨</p>
+      <span class="sig">Crystal</span>
+    </article>
+    <p class="verse">“God loveth a cheerful giver.” 2 Corinthians 9:7</p>
+    <a class="btn" href="/rebuild-a8k3" id="open">Open my declarations</a>
+    <p class="small" id="receipt">Your receipt is on its way to your inbox.</p>
+  </section>
 </main>
 <script>
 (function(){
-  var id=(location.search.match(/session_id=([^&]+)/)||[])[1];
-  try{ localStorage.setItem("bling-access",JSON.stringify({at:Date.now(),paid:true})); }catch(e){}
-  if(!id){ return; }
+  var q=location.search, $=function(id){return document.getElementById(id);};
+  function acc(){ try{ return JSON.parse(localStorage.getItem("bling-access")||"{}")||{}; }catch(e){ return {}; } }
+  function save(o){ try{ var a=acc(); for(var k in o) if(o[k]!=null) a[k]=o[k]; a.at=Date.now(); localStorage.setItem("bling-access",JSON.stringify(a)); }catch(e){} }
+  function first(n){ n=String(n||"").trim().split(/\s+/)[0]||""; return n?n.charAt(0).toUpperCase()+n.slice(1):""; }
+
+  if(/[?&]free=1/.test(q)){
+    var nm=first(acc().name);
+    $("free").hidden=false; document.title="You’re in · Broke to B.L.I.N.G.";
+    if(nm) $("freeTitle").textContent="Welcome, "+nm+"!";
+    return;
+  }
+
+  $("paid").hidden=false; document.title="Thank you · Broke to B.L.I.N.G.";
+  save({paid:true});
+  var give=/[?&]gift=1/.test(q);
+  function paint(name,amount,kind){
+    var nm=first(name), amt=amount?("$"+(amount/100).toFixed(2).replace(/\.00$/,"")):"";
+    var isGift=kind?kind==="gift":give;
+    $("eyebrow").textContent=isGift?"Your gift was received":"Payment received";
+    $("title").textContent=nm?("Thank you, "+nm+"!"):"Thank you!";
+    $("text").textContent="Crystal wrote you a note.";
+    $("hi").textContent=nm?("Dear "+nm+","):"Dear friend,";
+    if(amt){ $("giftTag").textContent=(isGift?"Your gift · ":"Your contribution · ")+amt; $("giftTag").hidden=false; }
+  }
+  paint(acc().name,null,null);
+  var id=(q.match(/session_id=([^&]+)/)||[])[1];
+  if(!id) return;
   fetch("/.netlify/functions/verify-session?session_id="+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(j){
-    if(!j||!j.paid){ document.getElementById("eyebrow").textContent="Almost there"; document.getElementById("text").textContent="We could not confirm your payment yet. If you were charged, your receipt from Stripe is your confirmation, and your access is ready below."; return; }
-    if(j.email){ try{ localStorage.setItem("bling-access",JSON.stringify({at:Date.now(),paid:true,email:j.email,name:j.name||null})); }catch(e){} }
-    var amt=j.amount?("$"+(j.amount/100).toFixed(2).replace(/\.00$/,"")):"";
-    if(j.kind==="gift"){ document.getElementById("title").textContent="Thank you for sowing"+(amt?" "+amt:""); document.getElementById("text").textContent="A receipt is on its way to "+(j.email||"your inbox")+"."; }
-    else { document.getElementById("title").textContent="You’re in. Thank you!"; document.getElementById("text").textContent="Your declarations are ready. A receipt is on its way to "+(j.email||"your inbox")+"."; }
+    if(!j||!j.paid){ $("eyebrow").textContent="Almost there"; $("receipt").textContent="We could not confirm your payment yet. If you were charged, your receipt from Stripe is your confirmation, and your access is ready."; return; }
+    save({email:j.email||null,name:j.name||null});
+    paint(j.name||acc().name,j.amount,j.kind);
+    if(j.email) $("receipt").textContent="Your receipt is on its way to "+j.email+".";
   }).catch(function(){});
 })();
 </script>

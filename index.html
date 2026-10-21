@@ -223,7 +223,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
     cta.disabled=true;
     if(v===0){
       cta.textContent="One moment…";
-      sbInsert({kind:"download",name:fn||null,email:e,show_public:$("pub").checked}).catch(function(){}).then(function(){ grant(e,fn); showDone(); });
+      sbInsert({kind:"download",name:fn||null,email:e,show_public:$("pub").checked}).catch(function(){}).then(function(){ grant(e,fn); location.href="/thanks.html?free=1"; });
       return;
     }
     cta.textContent="Opening secure checkout…";
