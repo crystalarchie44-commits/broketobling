@@ -921,6 +921,42 @@ body:not(.on-home) .scene .vignette{background:linear-gradient(90deg,rgba(5,4,4,
 .listen-txt .lsub{color:#CFC6B8!important;letter-spacing:.06em!important;text-transform:none!important;font-size:12px!important}
 @media (max-width:480px){.listen .wave{display:none}.listen{grid-template-columns:auto minmax(0,1fr)!important}}
 @media (prefers-reduced-motion:reduce){.listen.on .lav img{animation:none}}
+
+/* First-visit setup steps + Save to phone */
+.setup-steps{list-style:none;margin:6px auto 18px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:440px;counter-reset:none}
+.setup-steps li{display:grid;justify-items:center;gap:6px;text-align:center;position:relative}
+.setup-steps li:not(:last-child)::after{content:"";position:absolute;top:15px;left:calc(50% + 18px);right:calc(-50% + 18px);height:1px;background:rgba(217,188,134,.3)}
+.ss-n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:600;border:1px solid rgba(217,188,134,.45);color:#D9BC86;background:#0B0A09}
+.setup-steps li.now .ss-n{background:linear-gradient(135deg,#F3DFAE,#C9A15E);color:#140F08;border-color:transparent;box-shadow:0 0 18px rgba(217,188,134,.35)}
+.setup-steps li.done .ss-n{background:rgba(217,188,134,.18);color:#F3DFAE}
+.ss-t{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#B9AFA0}
+.setup-steps li.now .ss-t{color:#F3DFAE}
+.sv-phone{width:136px;height:210px;margin:6px auto 20px;border-radius:26px;border:2px solid rgba(217,188,134,.45);background:#0B0A09;padding:22px 16px;box-sizing:border-box;box-shadow:0 16px 40px rgba(0,0,0,.6),0 0 30px rgba(217,188,134,.12)}
+.sv-screen{display:grid;grid-template-columns:repeat(3,30px);justify-content:space-between;gap:16px 0}
+.sv-foot .skip{justify-self:center;text-align:center}
+.sv-screen>span{aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.06)}
+.sv-screen .sv-me{background:none;display:grid;justify-items:center;gap:3px;animation:svPop 1.6s ease-in-out infinite}
+.sv-me img{width:100%;border-radius:10px;box-shadow:0 0 0 2px #D9BC86,0 0 16px rgba(217,188,134,.6)}
+.sv-me small{font-size:7.5px;color:#F3DFAE;letter-spacing:.04em}
+@keyframes svPop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.sv-tabs{display:flex;gap:8px;justify-content:center;margin:0 0 14px}
+.sv-tabs button{appearance:none;border:1px solid rgba(217,188,134,.35);background:#0B0A09;color:#B9AFA0;border-radius:999px;padding:9px 18px;font:600 13px var(--ui,inherit);cursor:pointer}
+.sv-tabs button[aria-pressed="true"]{background:rgba(217,188,134,.16);color:#F3DFAE;border-color:#D9BC86}
+.sv-steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:sv}
+.sv-steps li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:14px 16px;border-radius:14px;background:rgba(11,10,9,.95);border:1px solid rgba(217,188,134,.28);counter-increment:sv;position:relative}
+.sv-steps li::before{content:counter(sv);position:absolute;top:-9px;left:-6px;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#F3DFAE,#C9A15E);color:#140F08;font-size:12px;font-weight:700;display:grid;place-items:center}
+.sv-ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:rgba(217,188,134,.1);color:#F3DFAE;border:1px solid rgba(217,188,134,.3)}
+.sv-ic .ic{width:26px;height:26px}
+.sv-steps b{display:block;font-size:16px;color:#FFFCF6;margin-bottom:2px}
+.sv-steps div span{font-size:13.5px;color:#D3CABB;line-height:1.5}
+.sv-alert{display:grid;gap:10px;padding:16px;border-radius:14px;background:rgba(11,10,9,.95);border:1px solid rgba(217,188,134,.45);text-align:center}
+.sv-alert b{font-size:16px;color:#FFFCF6}.sv-alert span{font-size:14px;color:#D3CABB;line-height:1.55}
+.sv-link{display:block;padding:10px;border-radius:10px;background:#000;color:#F3DFAE;font-size:13px;word-break:break-all}
+.sv-install{width:100%}.sv-or{text-align:center;font-size:12.5px;color:#B9AFA0;margin:8px 0}
+.sv-foot{display:grid;gap:10px;justify-items:center;margin-top:20px}
+.sv-foot .btn{width:100%;max-width:360px}
+.sv-note{text-align:center;font-size:12.5px;color:#B9AFA0;margin-top:12px}
+@media (prefers-reduced-motion:reduce){.sv-screen .sv-me{animation:none}}
 </style>
 </head>
 <body>
@@ -1134,8 +1170,8 @@ var BLING = [
 
 /* ---------- State (kept in this browser only) ---------- */
 var KEY="bling-declarations-v2";
-var state={found:{},saved:[],reflect:{},name:"",focus:"",size:"normal",prefs:false,notes:{},celebrated:false,installSeen:false,research:null,lastSec:""};
-try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); state.found=p.found||{}; state.saved=p.saved||[]; state.reflect=p.reflect||{}; state.name=p.name||""; state.focus=p.focus||""; state.size=p.size||"normal"; state.prefs=!!p.prefs; state.notes=p.notes||{}; state.celebrated=!!p.celebrated; state.installSeen=!!p.installSeen; state.research=p.research||null; state.lastSec=p.lastSec||"";}}catch(e){}
+var state={found:{},saved:[],reflect:{},name:"",focus:"",size:"normal",prefs:false,notes:{},celebrated:false,installSeen:false,research:null,lastSec:"",onboarded:false};
+try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); state.found=p.found||{}; state.saved=p.saved||[]; state.reflect=p.reflect||{}; state.name=p.name||""; state.focus=p.focus||""; state.size=p.size||"normal"; state.prefs=!!p.prefs; state.notes=p.notes||{}; state.celebrated=!!p.celebrated; state.installSeen=!!p.installSeen; state.research=p.research||null; state.lastSec=p.lastSec||""; state.onboarded=(p.onboarded!==undefined)?!!p.onboarded:!!p.prefs;}}catch(e){}
 function applySize(){document.body.classList.toggle("big",state.size==="large");}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 
@@ -1250,6 +1286,7 @@ function go(view,arg){
   else if(view==="research") research();
   else if(view==="letter") letter();
   else if(view==="install") install();
+  else if(view==="save") saveScreen();
   else if(view==="card") cardPage();
   else if(view==="choose") choose();
   else if(view==="section") section(arg);
@@ -1306,11 +1343,12 @@ function initGem3D(){
   gem3d={r:r,raf:0}; gem3d.raf=requestAnimationFrame(frame);
 }
 function personalize(){
-  var first=!state.prefs;
+  var first=!state.prefs, shortForm=first&&isStandalone();
   app.innerHTML='<section class="screen">'+
    '<button class="back" type="button" data-go="home">← Cover</button>'+
-   '<div class="head center"><div class="p-gem lit">'+gem("round")+'</div><span class="eyebrow">'+(first?'Before you step in':'Your preferences')+'</span>'+
-   '<h2>Make this guide yours</h2><p>'+(first?'A few quick questions, about a minute. Every one is optional, and you can change them anytime under <b>You</b>.':'Your answers stay on this phone, and you can change them anytime under <b>You</b>.')+'</p></div>'+
+   (first&&!shortForm?setupSteps(1):'')+
+   '<div class="head center">'+(first&&!shortForm?'':'<div class="p-gem lit">'+gem("round")+'</div>')+'<span class="eyebrow">'+(first?(shortForm?'Welcome to your app':'Step 1 · Make it yours'):'Your preferences')+'</span>'+
+   '<h2>Make this guide yours</h2><p>'+(shortForm?'Add your name and choose your text size. That is all.':first?'A few quick questions, about a minute. Every one is optional, and you can change them anytime under <b>You</b>.':'Your answers stay on this phone, and you can change them anytime under <b>You</b>.')+'</p></div>'+
    
    '<form class="page prefs" id="prefsForm" novalidate>'+
      '<div class="q"><label class="ql" for="pName"><span class="qn">1</span>What name should these declarations be spoken over?</label>'+
@@ -1321,14 +1359,14 @@ function personalize(){
        '<div class="chips" role="radiogroup" aria-labelledby="focusLbl">'+SECTIONS.map(function(x){
          return '<button type="button" class="chip" role="radio" data-focus="'+x.id+'" aria-checked="'+(state.focus===x.id)+'">'+gem(x.cut)+'<span>'+esc(x.name)+'</span></button>';
        }).join("")+'</div></div>'+
-     (first?researchQs(3):'')+
-     '<div class="q"><span class="ql" id="sizeLbl"><span class="qn">'+(first?7:3)+'</span>How would you like to read?</span>'+
+     (first&&!shortForm?researchQs(3):'')+
+     '<div class="q"><span class="ql" id="sizeLbl"><span class="qn">'+(first&&!shortForm?7:3)+'</span>How would you like to read?</span>'+
        '<p class="qh">You will see the change right away.</p>'+
        '<div class="seg" role="radiogroup" aria-labelledby="sizeLbl">'+
          '<button type="button" role="radio" data-size="normal" aria-checked="'+(state.size!=="large")+'"><b class="aa">Aa</b>Standard text</button>'+
          '<button type="button" role="radio" data-size="large" aria-checked="'+(state.size==="large")+'"><b class="aa big-aa">Aa</b>Larger text</button>'+
        '</div></div>'+
-     '<div class="prefs-foot"><button class="btn" type="submit">'+(first?'Save and read Crystal’s letter':'Save preferences')+'</button>'+
+     '<div class="prefs-foot"><button class="btn" type="submit">'+(shortForm?'Open my declarations':first?'Continue to Step 2':'Save preferences')+'</button>'+
        (first?'<button class="skip" type="button" id="skipPrefs">Skip for now</button>':'')+'</div>'+
    '</form>'+
   '</section>';
@@ -1343,21 +1381,22 @@ function personalize(){
     state.size=size; applySize();
     var seg=c.closest(".seg"); if(seg) requestAnimationFrame(function(){ seg.scrollIntoView({block:"center"}); });
   });});
-  if(first) wireResearchChips();
+  if(first&&!shortForm) wireResearchChips();
   document.getElementById("prefsForm").addEventListener("submit",function(e){
     e.preventDefault();
     var res=null;
-    if(first){ res=readResearch(); if(!res) return; }
+    if(first&&!shortForm){ res=readResearch(); if(!res) return; }
     setName(document.getElementById("pName").value);
     state.focus=focus; state.size=size; state.prefs=true;
     if(res){ state.research=res; }
     persist(); applySize();
     if(res) sendResearch(res);
     toast(state.name?"Saved, "+state.name:"Preferences saved","round");
+    if(shortForm){ state.onboarded=true; state.installSeen=true; persist(); go("welcome"); return; }
     go(first?"letter":"choose");
   });
   var sk=document.getElementById("skipPrefs");
-  if(sk) sk.addEventListener("click",function(){state.prefs=true; persist(); go("letter");});
+  if(sk) sk.addEventListener("click",function(){state.prefs=true; if(shortForm){state.onboarded=true;state.installSeen=true;} persist(); go(shortForm?"welcome":"letter");});
   if(!first){ var lk=document.createElement("div"); lk.className="prefs-links"; lk.innerHTML='<button class="btn ghost" type="button" data-go="research">Help shape what comes next</button><button class="btn ghost" type="button" data-go="install">How to add this to your home screen</button>'; app.querySelector(".screen").appendChild(lk); }
 }
 /* ---------- Research step (optional) ---------- */
@@ -1507,7 +1546,8 @@ function wireListen(file){
 function letter(){
   app.innerHTML='<section class="screen">'+
    '<figure class="crystal-portrait"><span class="cp-frame"><img src="crystal.jpg" alt="Crystal" width="560" height="700"></span></figure>'+
-   '<div class="head"><span class="eyebrow">Before you begin</span><h2>A letter from Crystal</h2></div>'+
+   (!state.onboarded?setupSteps(2):'')+
+   '<div class="head"><span class="eyebrow">'+(!state.onboarded?'Step 2 · A letter for you':'Before you begin')+'</span><h2>A letter from Crystal</h2></div>'+
    '<article class="page letter-page">'+
      listenHTML('Her letter to you')+
      '<p class="dear">Dear '+(state.name?nm():'sister')+',</p>'+
@@ -1517,7 +1557,7 @@ function letter(){
      '<p>I am believing with you.</p>'+
      '<div class="sig"><span>With love,</span><b>Crystal</b></div>'+
    '</article>'+
-   '<div class="sec-foot"><button class="btn" type="button" data-go="welcome">Continue</button></div>'+
+   '<div class="sec-foot"><button class="btn" type="button" data-go="'+(!state.onboarded&&!isStandalone()?'save':'welcome')+'">'+(!state.onboarded&&!isStandalone()?'Continue to Step 3':'Continue')+'</button></div>'+
   '</section>';
   wireListen("letter");
 }
@@ -1525,7 +1565,7 @@ function isStandalone(){ try{ return matchMedia("(display-mode: standalone)").ma
 function platform(){ var u=navigator.userAgent||""; if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1)) return "ios"; if(/Android/.test(u)) return "android"; return "desktop"; }
 var installEvt=null;
 window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); installEvt=e; var b=document.getElementById("installNow"); if(b) b.hidden=false; });
-function install(){
+function installOld(){
   var pf=platform(), done=isStandalone();
   var ios='<div class="ins'+(pf==="ios"?' you':'')+'"><span class="label">iPhone or iPad</span><ol class="steps">'+
     '<li>Open this guide in <b>Safari</b>. If you opened it from Instagram or Facebook, tap the three dots and choose “Open in browser” first.</li>'+
@@ -1550,6 +1590,53 @@ function install(){
   var b=document.getElementById("installNow");
   b.addEventListener("click",function(){ if(!installEvt) return; installEvt.prompt(); installEvt.userChoice.then(function(){installEvt=null; b.hidden=true;}); });
 }
+
+/* ---------- First-visit setup: 3 clear steps ---------- */
+function setupSteps(n){ var L=["Make it yours","Crystal’s letter","Save to your phone"];
+  return '<ol class="setup-steps" aria-label="Setup, step '+n+' of 3">'+L.map(function(t,i){var k=i+1; return '<li class="'+(k<n?'done':k===n?'now':'')+'"'+(k===n?' aria-current="step"':'')+'><span class="ss-n">'+(k<n?'✓':k)+'</span><span class="ss-t">'+t+'</span></li>';}).join("")+'</ol>'; }
+function inAppBrowser(){ return /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|Snapchat|LinkedInApp|Pinterest|Line\//i.test(navigator.userAgent||""); }
+var IC_SHARE='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6.5A1.5 1.5 0 0 0 5 11.5v8A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 17.5 10H16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+var IC_PLUS='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8.5v7M8.5 12h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+var IC_DOTS='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.8" fill="currentColor"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/><circle cx="12" cy="19" r="1.8" fill="currentColor"/></svg>';
+var IC_DIA='<img class="ic" src="icon-192.png" alt="" style="border-radius:7px">';
+function saveSteps(pf){
+  var appUrl=location.origin+"/rebuild-a8k3";
+  if(inAppBrowser()) return '<div class="sv-alert"><b>First, open this in your phone’s browser.</b><span>Apps like Instagram and Facebook can’t save to your home screen. Tap <b>•••</b> or the share icon at the top or bottom of the screen, then choose <b>Open in Safari</b> or <b>Open in browser</b>.</span><button type="button" class="btn ghost" id="copyLink">Copy the link instead</button></div>';
+  if(pf==="ios") return '<ol class="sv-steps">'+
+    '<li><span class="sv-ic">'+IC_SHARE+'</span><div><b>Tap the Share button</b><span>The square with the arrow, at the bottom of Safari. On iPad it is at the top.</span></div></li>'+
+    '<li><span class="sv-ic">'+IC_PLUS+'</span><div><b>Tap “Add to Home Screen”</b><span>Scroll down the list a little if you don’t see it right away.</span></div></li>'+
+    '<li><span class="sv-ic">'+IC_DIA+'</span><div><b>Tap “Add”</b><span>The diamond icon appears on your home screen. Open your declarations from there every day.</span></div></li></ol>';
+  if(pf==="android") return (installEvt?'<button class="btn sv-install" type="button" id="installNow2">Install the app</button><p class="sv-or">or do it by hand:</p>':'')+'<ol class="sv-steps">'+
+    '<li><span class="sv-ic">'+IC_DOTS+'</span><div><b>Tap the three dots</b><span>In the top right corner of Chrome.</span></div></li>'+
+    '<li><span class="sv-ic">'+IC_PLUS+'</span><div><b>Tap “Install app” or “Add to Home screen”</b><span>Either one works.</span></div></li>'+
+    '<li><span class="sv-ic">'+IC_DIA+'</span><div><b>Tap “Install”</b><span>The diamond icon appears with your apps.</span></div></li></ol>';
+  return '<div class="sv-alert"><b>Open this on your phone</b><span>This guide is made for your phone. Open the link below in Safari (iPhone) or Chrome (Android), then come back to this step.</span><code class="sv-link">'+esc(appUrl.replace(/^https?:\/\//,""))+'</code><button type="button" class="btn ghost" id="copyLink">Copy the link</button></div>';
+}
+function wireSave(){
+  var b=document.getElementById("installNow2"); if(b) b.addEventListener("click",function(){ if(!installEvt) return; installEvt.prompt(); installEvt.userChoice.then(function(c){ installEvt=null; if(c&&c.outcome==="accepted"){ finishSetup(true); } }); });
+  var c=document.getElementById("copyLink"); if(c) c.addEventListener("click",function(){ var u=location.origin+"/rebuild-a8k3?access=link"; try{ navigator.clipboard.writeText(u).then(function(){ c.textContent="Link copied"; }); }catch(e){ c.textContent=u; } });
+  app.querySelectorAll("[data-pf]").forEach(function(t){ t.addEventListener("click",function(){ var pf=t.getAttribute("data-pf"); document.getElementById("svBody").innerHTML=saveSteps(pf); app.querySelectorAll("[data-pf]").forEach(function(o){o.setAttribute("aria-pressed",String(o===t));}); wireSave(); }); });
+}
+function finishSetup(added){ state.onboarded=true; if(added) state.installSeen=true; persist(); if(added) toast(state.name?"Beautiful, "+state.name+". See you tomorrow.":"Beautiful. See you tomorrow.","round"); go("welcome"); }
+function saveScreen(){
+  var pf=platform(), first=!state.onboarded;
+  if(isStandalone()){ finishSetup(true); return; }
+  var showPf=pf==="desktop"?"ios":pf;
+  app.innerHTML='<section class="screen">'+
+   (first?setupSteps(3):'<button class="back" type="button" data-go="welcome">← Home</button>')+
+   '<div class="head center"><span class="eyebrow">'+(first?'Step 3 · Save to your phone':'Keep it close')+'</span><h2>Put your declarations on your home screen</h2>'+
+   '<p>It takes 20 seconds. You’ll get a diamond icon that opens this like an app, so you can come back every day with one tap.</p></div>'+
+   '<div class="sv-phone" aria-hidden="true"><div class="sv-screen"><span></span><span></span><span></span><span class="sv-me"><img src="icon-192.png" alt=""><small>B.L.I.N.G.</small></span><span></span><span></span></div></div>'+
+   (pf==="desktop"?'':'<div class="sv-tabs" role="group" aria-label="Choose your phone"><button type="button" data-pf="ios" aria-pressed="'+(showPf==="ios")+'">iPhone</button><button type="button" data-pf="android" aria-pressed="'+(showPf==="android")+'">Android</button></div>')+
+   '<div id="svBody">'+saveSteps(pf==="desktop"?"desktop":showPf)+'</div>'+
+   '<div class="sv-foot"><button class="btn" type="button" id="svDone">I added it</button><button class="skip" type="button" id="svLater">'+(first?'I’ll do it later':'Back to home')+'</button></div>'+
+   '<p class="sv-note">You can find these steps anytime under <b>You</b>.</p>'+
+  '</section>';
+  wireSave();
+  document.getElementById("svDone").addEventListener("click",function(){ finishSetup(true); });
+  document.getElementById("svLater").addEventListener("click",function(){ finishSetup(false); });
+}
+function install(){ saveScreen(); }
 function todaysWord(){
   var d=new Date(), seed=d.getFullYear()*1000+Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);
   var sec=(state.focus&&seed%2===0)?byId(state.focus):SECTIONS[seed%10];
