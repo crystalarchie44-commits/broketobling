@@ -958,6 +958,7 @@ body:not(.on-home) .scene .vignette{background:linear-gradient(90deg,rgba(5,4,4,
 .sv-note{text-align:center;font-size:12.5px;color:#B9AFA0;margin-top:12px}
 @media (prefers-reduced-motion:reduce){.sv-screen .sv-me{animation:none}}
 .invite .ctc-more{display:block;margin-top:14px;color:#F3DFAE;font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:4px}.invite .ctc-note{display:block;margin-top:6px;font-size:13px;color:#C9C0B2}
+.req-err{text-align:center;margin:0 0 6px;font-size:14px}.q.q-miss{animation:qmiss 1.6s ease}@keyframes qmiss{0%,60%{box-shadow:0 0 0 2px rgba(240,160,138,.75);border-radius:14px}100%{box-shadow:0 0 0 0 transparent}}
 </style>
 </head>
 <body>
@@ -1349,26 +1350,25 @@ function personalize(){
    '<button class="back" type="button" data-go="home">← Cover</button>'+
    (first&&!shortForm?setupSteps(1):'')+
    '<div class="head center">'+(first&&!shortForm?'':'<div class="p-gem lit">'+gem("round")+'</div>')+'<span class="eyebrow">'+(first?(shortForm?'Welcome to your app':'Step 1 · Make it yours'):'Your preferences')+'</span>'+
-   '<h2>Make this guide yours</h2><p>'+(shortForm?'Add your name and choose your text size. That is all.':first?'A few quick questions, about a minute. Every one is optional, and you can change them anytime under <b>You</b>.':'Your answers stay on this phone, and you can change them anytime under <b>You</b>.')+'</p></div>'+
+   '<h2>Make this guide yours</h2><p>'+(first?'Four quick questions, about a minute. Your answers help us create what comes next for women rebuilding with God.':'Your answers stay on this phone, and you can change them anytime under <b>You</b>.')+'</p></div>'+
    
    '<form class="page prefs" id="prefsForm" novalidate>'+
-     '<div class="q"><label class="ql" for="pName"><span class="qn">1</span>What name should these declarations be spoken over?</label>'+
+     (first?'':'<div class="q"><label class="ql" for="pName"><span class="qn">1</span>What name should these declarations be spoken over?</label>'+
        '<p class="qh">Just your first name. Every page will speak to you by name.</p>'+
-       '<input id="pName" class="txt" type="text" maxlength="30" placeholder="Your first name" autocomplete="given-name" value="'+esc(state.name||accessName())+'"></div>'+
-     '<div class="q"><span class="ql" id="focusLbl"><span class="qn">2</span>What are you rebuilding most right now?</span>'+
-       '<p class="qh">Tap one area. Tap it again to clear it. You can still visit every section.</p>'+
+       '<input id="pName" class="txt" type="text" maxlength="30" placeholder="Your first name" autocomplete="given-name" value="'+esc(state.name||accessName())+'"></div>')+
+     '<div class="q" id="qFocus"><span class="ql" id="focusLbl"><span class="qn">'+(first?1:2)+'</span>What are you rebuilding most right now?</span>'+
+       '<p class="qh">'+(first?'Choose one. You can still visit every section.':'Tap one area. Tap it again to clear it. You can still visit every section.')+'</p>'+
        '<div class="chips" role="radiogroup" aria-labelledby="focusLbl">'+SECTIONS.map(function(x){
          return '<button type="button" class="chip" role="radio" data-focus="'+x.id+'" aria-checked="'+(state.focus===x.id)+'">'+gem(x.cut)+'<span>'+esc(x.name)+'</span></button>';
        }).join("")+'</div></div>'+
-     (first&&!shortForm?researchQs(3):'')+
-     '<div class="q"><span class="ql" id="sizeLbl"><span class="qn">'+(first&&!shortForm?7:3)+'</span>How would you like to read?</span>'+
+     (first?researchQs(2,true):'')+
+     '<div class="q"><span class="ql" id="sizeLbl"><span class="qn">'+(first?5:3)+'</span>How would you like to read?</span>'+
        '<p class="qh">You will see the change right away.</p>'+
        '<div class="seg" role="radiogroup" aria-labelledby="sizeLbl">'+
          '<button type="button" role="radio" data-size="normal" aria-checked="'+(state.size!=="large")+'"><b class="aa">Aa</b>Standard text</button>'+
          '<button type="button" role="radio" data-size="large" aria-checked="'+(state.size==="large")+'"><b class="aa big-aa">Aa</b>Larger text</button>'+
        '</div></div>'+
-     '<div class="prefs-foot"><button class="btn" type="submit">'+(shortForm?'Open my declarations':first?'Continue to Step 2':'Save preferences')+'</button>'+
-       (first?'<button class="skip" type="button" id="skipPrefs">Skip for now</button>':'')+'</div>'+
+     '<div class="prefs-foot">'+(first?'<p class="r-err req-err" id="reqErr" role="alert"></p>':'')+'<button class="btn" type="submit">'+(shortForm?'Open my declarations':first?'Continue to Step 2':'Save preferences')+'</button></div>'+
    '</form>'+
   '</section>';
   var focus=state.focus, size=state.size;
@@ -1382,12 +1382,15 @@ function personalize(){
     state.size=size; applySize();
     var seg=c.closest(".seg"); if(seg) requestAnimationFrame(function(){ seg.scrollIntoView({block:"center"}); });
   });});
-  if(first&&!shortForm) wireResearchChips();
+  if(first) wireResearchChips();
   document.getElementById("prefsForm").addEventListener("submit",function(e){
     e.preventDefault();
     var res=null, prevName=state.name, prevFocus=state.focus;
-    if(first&&!shortForm){ res=readResearch(); if(!res) return; }
-    setName(document.getElementById("pName").value);
+    if(first){ res=readResearch(); if(!res) return;
+      var miss=!focus?"qFocus":!res.season?"qSeason":!res.skills.length?"qSkills":!res.learn.length?"qLearn":"";
+      if(miss){ var re=document.getElementById("reqErr"); re.textContent=miss==="qFocus"?"Choose what you are rebuilding most to continue.":miss==="qSeason"?"Choose the season you are in to continue.":miss==="qSkills"?"Choose at least one skill you would love to learn.":"Choose at least one way you would like to learn.";
+        var qe=document.getElementById(miss); if(qe){ qe.classList.add("q-miss"); qe.scrollIntoView({behavior:"smooth",block:"center"}); setTimeout(function(){qe.classList.remove("q-miss");},1600); } return; } }
+    var pn=document.getElementById("pName"); setName(pn?pn.value:(state.name||accessName()));
     state.focus=focus; state.size=size; state.prefs=true;
     if(res){ state.research=res; }
     persist(); applySize();
@@ -1417,12 +1420,12 @@ function sendResearch(r){
 }
 function rChips(list,group,multi,sel){ return '<div class="chips rchips" role="'+(multi?'group':'radiogroup')+'" aria-labelledby="'+group+'Lbl">'+list.map(function(t,i){ var on=multi?sel.indexOf(t)>-1:sel===t;
     return '<button type="button" class="chip rchip" '+(multi?'aria-pressed':'role="radio" aria-checked')+'="'+on+'" data-g="'+group+'" data-v="'+i+'"><span>'+esc(t)+'</span></button>'; }).join("")+'</div>'; }
-function researchQs(n){ var r=state.research||{season:"",skills:[],learn:[],email:""};
-  return '<div class="q"><label class="ql" for="rEmail"><span class="qn">'+n+'</span>Your email</label><p class="qh">Optional. Be first to hear about new declarations and what is coming next.</p>'+
-       '<input id="rEmail" class="txt" type="email" placeholder="Your email" autocomplete="email" value="'+esc(r.email||"")+'"><span class="r-err" id="rErr" role="alert"></span></div>'+
-     '<div class="q"><span class="ql" id="seasonLbl"><span class="qn">'+(n+1)+'</span>What season are you in right now?</span><p class="qh">Choose the one that fits best.</p>'+rChips(R_SEASON,"season",false,r.season)+'</div>'+
-     '<div class="q"><span class="ql" id="skillsLbl"><span class="qn">'+(n+2)+'</span>God often opens new doors through new skills. Which would you love to learn?</span><p class="qh">Choose any that stir something in you.</p>'+rChips(R_SKILLS,"skills",true,r.skills)+'</div>'+
-     '<div class="q"><span class="ql" id="learnLbl"><span class="qn">'+(n+3)+'</span>If we made something just for you, how would you want to learn?</span><p class="qh">Choose any.</p>'+rChips(R_LEARN,"learn",true,r.learn)+'</div>'; }
+function researchQs(n,noEmail){ var r=state.research||{season:"",skills:[],learn:[],email:""}, o=noEmail?-1:0;
+  return (noEmail?'':'<div class="q"><label class="ql" for="rEmail"><span class="qn">'+n+'</span>Your email</label><p class="qh">Optional. Be first to hear about new declarations and what is coming next.</p>'+
+       '<input id="rEmail" class="txt" type="email" placeholder="Your email" autocomplete="email" value="'+esc(r.email||"")+'"><span class="r-err" id="rErr" role="alert"></span></div>')+
+     '<div class="q" id="qSeason"><span class="ql" id="seasonLbl"><span class="qn">'+(n+1+o)+'</span>What season are you in right now?</span><p class="qh">Choose the one that fits best.</p>'+rChips(R_SEASON,"season",false,r.season)+'</div>'+
+     '<div class="q" id="qSkills"><span class="ql" id="skillsLbl"><span class="qn">'+(n+2+o)+'</span>God often opens new doors through new skills. Which would you love to learn?</span><p class="qh">Choose any that stir something in you.</p>'+rChips(R_SKILLS,"skills",true,r.skills)+'</div>'+
+     '<div class="q" id="qLearn"><span class="ql" id="learnLbl"><span class="qn">'+(n+3+o)+'</span>If we made something just for you, how would you want to learn?</span><p class="qh">Choose any.</p>'+rChips(R_LEARN,"learn",true,r.learn)+'</div>'; }
 function wireResearchChips(){
   app.querySelectorAll(".rchip").forEach(function(b){ b.addEventListener("click",function(){
     var g=b.getAttribute("data-g");
@@ -1449,7 +1452,7 @@ function research(){
      '<div class="q"><span class="ql" id="learnLbl"><span class="qn">3</span>If we made something just for you, how would you want to learn?</span><p class="qh">Choose any.</p>'+chips(R_LEARN,"learn",true,r.learn)+'</div>'+
      '<div class="q"><label class="ql" for="rEmail"><span class="qn">4</span>Want first access when new resources open?</label><p class="qh">Optional. Leave your email and you will hear first.</p>'+
        '<input id="rEmail" class="txt" type="email" placeholder="Your email" autocomplete="email" value="'+esc(r.email||"")+'"><span class="r-err" id="rErr" role="alert"></span></div>'+
-     '<div class="prefs-foot"><button class="btn" type="submit">'+(first?'Share and continue':'Save my answers')+'</button>'+(first?'<button class="skip" type="button" id="skipRes">Skip for now</button>':'')+'</div>'+
+     '<div class="prefs-foot"><button class="btn" type="submit">'+(first?'Share and continue':'Save my answers')+'</button>'+'</div>'+
    '</form>'+
   '</section>';
   app.querySelectorAll(".rchip").forEach(function(b){ b.addEventListener("click",function(){

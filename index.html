@@ -127,7 +127,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
           <label class="lbl" for="amt" id="amtLbl">Name a fair price:</label>
           <div class="price"><span class="cur" aria-hidden="true">$</span><input id="amt" inputmode="decimal" autocomplete="off" value="0" aria-describedby="amtNote"></div>
           <div class="chips" id="chips" role="group" aria-label="Quick amounts"></div>
-          <input class="email" id="fname" type="text" placeholder="First name" autocomplete="given-name" maxlength="60" aria-label="First name">
+          <input class="email" id="fname" type="text" placeholder="First name" autocomplete="given-name" maxlength="60" aria-label="First name" required>
           <input class="email" id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address" required>
           <p class="msg" id="msg" role="alert"></p>
           <button class="btn" type="submit" id="cta">I want this!</button>
@@ -197,6 +197,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 40px;display:flex;justif
   $("buy").addEventListener("submit",function(ev){
     ev.preventDefault();
     var v=Math.round((parseFloat(amt.value)||0)*100)/100, e=email.value.trim(), fn=($("fname").value||"").trim().slice(0,60);
+    if(!fn){ msg.textContent="Enter your first name."; $("fname").focus(); return; }
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){ msg.textContent="Enter your email so we can send you access."; email.focus(); return; }
     if(give&&v<1){ msg.textContent="Gifts start at $1."; amt.focus(); return; }
     if(v>0&&v<1){ msg.textContent="Enter 0 for free, or $1 or more to contribute."; amt.focus(); return; }
