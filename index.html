@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Broke to B.L.I.N.G. Declarations</title>
-<meta name="description" content="A faith-filled collection of Scripture-inspired declarations for the seasons when life feels broken, uncertain, or hard to rebuild. Free, with an optional contribution.">
+<meta name="description" content="A faith-filled collection of Scripture-inspired declarations for the seasons when life feels broken, uncertain, or hard to rebuild. FREE.">
 <meta property="og:title" content="The Broke to B.L.I.N.G. Declarations">
-<meta property="og:description" content="Scripture-inspired declarations for the woman rebuilding with God. Free, with an optional contribution.">
+<meta property="og:description" content="Scripture-inspired declarations for the woman rebuilding with God. FREE.">
 <meta property="og:image" content="https://broketobling.com/og-image.jpg">
 <meta property="og:url" content="https://broketobling.com/">
 <meta name="twitter:card" content="summary_large_image">
@@ -110,6 +110,14 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justif
 .stick span b{display:block;color:#FFFCF6;font-size:14.5px}
 .stick a{flex:none;text-decoration:none;border-radius:10px;padding:12px 16px;font:600 14px var(--ui);color:#140F08;background:linear-gradient(135deg,#F3DFAE,#D9BC86 55%,#B98A45)}
 @media (max-width:820px){.stick{display:flex}body{padding-bottom:90px}}
+.free-h{white-space:nowrap}.free-h strong{font-family:var(--ui);font-weight:800;letter-spacing:.06em;color:var(--gold2)}
+.seed{margin:0 24px 26px;border-top:1px solid var(--line-soft);padding-top:18px}
+.seed .m-lbl{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.seed p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--mist)}
+.seed b{color:var(--gold2);font-weight:600}
+.seed a{font-size:13px;font-weight:600;text-decoration:none;color:var(--gold)}
+.seed a:hover{text-decoration:underline}
+@media (max-width:820px){.seed{order:7;margin:0 18px 30px}}
 .pub{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mist);line-height:1.45;cursor:pointer}
 .pub input{margin:2px 0 0;width:16px;height:16px;accent-color:#D9BC86;flex:none}
 </style>
@@ -125,39 +133,45 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justif
     <div class="cover"><img src="cover.jpg" alt="Broke to B.L.I.N.G. Declarations" width="1200" height="675"></div>
     <div class="body">
       <section class="main">
-        <h1 id="title">The Broke to B.L.I.N.G. Declarations</h1>
+        <h1 id="title">The Broke to B.L.I.N.G. Declarations <span class="free-h">– <strong>FREE</strong></span></h1>
         <div class="by"><img src="crystal.jpg" alt=""><span>Crystal Archie</span></div>
-        <p class="intro" id="intro"><b>Scripture-inspired declarations and prayers</b> for the seasons when life feels broken and hard to rebuild, read to you by Crystal in her own voice. It’s free. If it blesses you, you’re welcome to give any amount.</p>
+        <p class="intro" id="intro"><b>Scripture-inspired declarations and prayers</b> for the seasons when life feels broken and hard to rebuild, read to you by Crystal in her own voice. It’s <b>FREE</b>.</p>
         <div class="desc" id="desc">
           <p><b>The Broke to B.L.I.N.G. Declarations</b> is a faith-filled collection of Scripture-inspired declarations for the seasons when life feels broken, uncertain, or hard to rebuild.</p>
           <p>Use these words to pause, pray, and speak truth over the areas of life that need hope and renewal, from faith and identity to family, health, finances, and purpose. Each declaration is a reminder that a difficult season does not define your whole story, and with God, you can believe again and take your next step.</p>
           <p>Open the guide on your phone, choose a section that speaks to where you are today, and declare it over your life. Hear Crystal read every declaration and prayer in her own voice.</p>
           <p class="bling">Believe Big. Leave a Legacy. Inspire Greatness. Never Give Up. Glorify God.</p>
-          <p>This interactive guide is offered free, with an optional “pay what you want” contribution if it brings you value. If you feel led to sow into this work, you are welcome to give any amount, but there is no pressure. I simply want you to have these declarations.</p>
-          <p>Any gift helps bring me one step closer to returning to Africa to continue the work of <b>The Treasured Foundation</b>, the nonprofit I founded. We work alongside families in Ethiopia who are facing deep poverty and need safe homes, opportunities to earn a living, and hope for a brighter future.</p>
+          <p>This interactive guide is <b>FREE</b>. No card, no catch. I simply want you to have these declarations.</p>
+        </div>
+        <div class="seed" id="seed">
+          <span class="m-lbl">Feel led to sow a seed?</span>
+          <p>Giving is never expected. If these declarations bless you and you want to support this work, every gift brings me one step closer to returning to Africa to continue the work of <b>The Treasured Foundation</b>, the nonprofit I founded. We work alongside families in Ethiopia facing deep poverty with safe homes, ways to earn a living, and hope for a brighter future.</p>
+          <a href="/?give=1">Sow a seed →</a>
         </div>
       </section>
 
       <aside class="side" id="side">
         <form id="buy" novalidate style="display:grid;gap:14px">
-          <span class="tag" id="tag">$0+</span>
-          <label class="lbl" for="amt" id="amtLbl">Name a fair price:</label>
+          <span class="tag" id="tag">FREE</span>
+          <div id="payBits" hidden style="display:grid;gap:14px;grid-template-columns:minmax(0,1fr);min-width:0">
+          <label class="lbl" for="amt" id="amtLbl">Choose your gift:</label>
           <div class="price"><span class="cur" aria-hidden="true">$</span><input id="amt" inputmode="decimal" autocomplete="off" value="0" aria-describedby="amtNote"></div>
           <div class="chips" id="chips" role="group" aria-label="Quick amounts"></div>
+          </div>
           <input class="email" id="fname" type="text" placeholder="First name" autocomplete="given-name" maxlength="60" aria-label="First name" required>
           <input class="email" id="email" type="email" placeholder="Your email" autocomplete="email" aria-label="Email address" required>
           <label class="pub"><input type="checkbox" id="pub" checked><span>Show my first name in the “recent supporters” notes on this page</span></label>
           <p class="msg" id="msg" role="alert"></p>
           <button class="btn" type="submit" id="cta">I want this!</button>
           <div id="ppWrap" hidden><div class="ppor"><span>or pay with</span></div><div id="ppBtns"></div></div>
-          <p class="note" id="amtNote">Enter 0 to get it free. Any amount over $1 is a gift that supports this work.</p>
+          <p class="note" id="amtNote">No payment needed. Just your name and email so we can send you access.</p>
         </form>
         <div class="meta" id="meta">
           <div><span>Format</span>Interactive app for your phone</div>
           <div><span>Inside</span>10 areas · 70 declarations · prayers</div>
           <div><span>Audio</span>Read by Crystal</div>
         </div>
-        <div class="mission" id="mission">
+        <div class="mission" id="mission" hidden>
           <span class="m-lbl">Where your gift goes</span>
           <p>Every contribution brings Crystal one step closer to returning to Africa to continue the work of <b>The Treasured Foundation</b>, the nonprofit she founded. It serves families in Ethiopia facing deep poverty with safe homes, ways to earn a living, and hope for a brighter future.</p>
         </div>
@@ -172,7 +186,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justif
     </div>
   </article>
 </main>
-<div class="stick" id="stick" aria-hidden="true"><span><b>Free, or pay what you want</b>Hear Crystal read every declaration</span><a href="#side" data-to-side tabindex="-1">I want this!</a></div>
+<div class="stick" id="stick" aria-hidden="true"><span><b>100% FREE</b>Hear Crystal read every declaration</span><a href="#side" data-to-side tabindex="-1">I want this!</a></div>
 <div class="sp" id="sp" role="status" aria-live="polite"><img src="diamond.png" alt=""><div><b id="spText"></b><span id="spTime"></span></div><button type="button" id="spX" aria-label="Hide notifications">×</button></div>
 <footer><span>Broke to B.L.I.N.G. · with Crystal</span><span>Secure checkout by Stripe</span></footer>
 <div class="credit"><span class="cby">App created with <span aria-label="love">♥</span> by <b>FutureWorks</b></span><span class="dot">·</span><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></div>
@@ -193,7 +207,7 @@ footer{max-width:1120px;margin:0 auto;padding:18px 16px 16px;display:flex;justif
       '<p>Your support also brings her one step closer to returning to Africa to continue the work of <b>The Treasured Foundation</b>, the nonprofit she founded. It works alongside families in Ethiopia who are facing deep poverty and need safe homes, opportunities to earn a living, and hope for a brighter future.</p>'+
       '<p>Choose any amount below. Your support is never required, and it is deeply appreciated.</p>'+
       '<p class="bling">“Every man according as he purposeth in his heart, so let him give; not grudgingly, or of necessity: for God loveth a cheerful giver.” 2 Corinthians 9:7</p>';
-    $("tag").textContent="$1+"; $("amtLbl").textContent="Choose your gift:"; amt.value="10";
+    $("tag").textContent="$1+"; $("payBits").hidden=false; $("seed").hidden=true; amt.value="10";
     $("amtNote").textContent="Secure payment by card, Apple Pay, or Google Pay."; cta.textContent="Give now"; $("meta").hidden=true; $("mission").hidden=true;
   }
   $("chips").innerHTML=CHIPS.map(function(v){return '<button type="button" class="chip" data-v="'+v+'" aria-pressed="false">$'+v+'</button>';}).join("")+'<button type="button" class="chip chip-other" data-other="1" aria-pressed="false">Other</button>';
