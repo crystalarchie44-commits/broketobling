@@ -20,7 +20,8 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://broketobling.com/og-image.jpg">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}.nlt-credit{display:block;margin-top:8px;font-size:.9em;opacity:.85}
+</style>
 <meta name="robots" content="noindex">
 <script>(function(){try{var q=location.search,ok=/[?&]access=/.test(q)||!!localStorage.getItem("bling-access")||!!localStorage.getItem("bling-declarations-v2")||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
 if(/[?&]access=/.test(q)){localStorage.setItem("bling-access",JSON.stringify({via:(q.match(/access=([^&]*)/)||[])[1]||"link",at:Date.now()}));history.replaceState(null,"",location.pathname);}
@@ -987,7 +988,7 @@ body.on-home .app-credit{display:none}.home-credit{position:relative;z-index:2;m
 </header>
 
 <main class="wrap" id="app"></main>
-<div class="app-credit">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b><br><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></div>
+<div class="app-credit">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b><br><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a><span class="nlt-credit">Scripture quotations marked NLT are taken from the Holy Bible, New Living Translation, copyright © 1996, 2004, 2015 by Tyndale House Foundation. Used by permission of Tyndale House Publishers, Carol Stream, Illinois 60188. All rights reserved.</span></div>
 
 <div class="drawer" id="navDrawer" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="navTitle">
@@ -1042,11 +1043,11 @@ var CUTS = {
 function gem(cut, extra){ return '<img class="dia'+(extra&&extra.indexOf('lit')>-1?' lit':'')+'" src="diamond.png" alt="" aria-hidden="true" draggable="false">'; }
 
 /* ---------- Content: from the Broke to B.L.I.N.G. Master Handoff manuscript ---------- */
-/* Anchor verse text is KJV (public domain); "Scripture to sit with" lists every reference from the manuscript. */
+/* Verse text is NLT (Tyndale, credit line in app footer) unless marked KJV (public domain); "Scripture to sit with" lists every reference from the manuscript. */
 var SECTIONS = [
  {id:"faith", no:"01", name:"Faith & a New Beginning", cut:"round",
   intro:"When the past feels heavy and the next chapter is unclear, return to the God who makes all things new.",
-  ref:"2 Corinthians 5:17", verse:"Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become new.",
+  ref:"2 Corinthians 5:17", verse:"This means that anyone who belongs to Christ has become a new person. The old life is gone; a new life has begun!", tr:"NLT",
   refs:"2 Corinthians 5:17 · Lamentations 3:22–23 · Romans 8:1 · Isaiah 43:18–19 · Philippians 1:6",
   decl:["I am not defined by my hardest season. My life is held by God, and my story is still being written.",
    "In Christ, I am loved, forgiven, chosen, and invited to begin again. Shame does not get the final word over me.",
@@ -1058,7 +1059,7 @@ var SECTIONS = [
   prayer:"Father, meet me in this new beginning. Remind me that my past does not erase Your love or cancel my calling. Give me grace for today, courage for the next step, and faith to believe You are still writing my story. In Jesus’ name, amen."},
  {id:"healing", no:"02", name:"Emotional Healing, Forgiveness, Peace & Courage", cut:"pear",
   intro:"God is not frightened by the truth of what you feel. You can grieve what was and still believe that hope will return.",
-  ref:"Psalm 34:18", verse:"The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.",
+  ref:"Psalm 34:18", verse:"The Lord is close to the brokenhearted; he rescues those whose spirits are crushed.", tr:"NLT",
   refs:"Psalm 34:18 · Psalm 23:4 · Isaiah 41:10 · Philippians 4:6–7 · 1 Peter 5:7",
   decl:["I am allowed to grieve what I lost without believing that all is lost.",
    "God is near to me in heartbreak, fear, disappointment, and uncertainty. I do not carry this alone.",
@@ -1070,7 +1071,7 @@ var SECTIONS = [
   prayer:"God of comfort, hold me in what hurts. Quiet the fear that tells me I will always feel this way. Restore hope gently, strengthen my heart, and help me receive the peace You are offering me today. Amen."},
  {id:"wisdom", no:"03", name:"Wisdom, Clarity & Direction", cut:"marquise",
   intro:"You do not have to force every answer today. Ask God for wisdom and trust Him to reveal the next step.",
-  ref:"James 1:5", verse:"If any of you lack wisdom, let him ask of God, that giveth to all men liberally, and upbraideth not; and it shall be given him.",
+  ref:"James 1:5", verse:"If you need wisdom, ask our generous God, and he will give it to you. He will not rebuke you for asking.", tr:"NLT",
   refs:"James 1:5 · Proverbs 3:5–6 · Psalm 32:8 · John 16:13 · Proverbs 15:22",
   decl:["God gives wisdom generously when I ask, and I can trust Him to guide me.",
    "Confusion will not control me. I can become still enough to recognize the voice of truth.",
@@ -1094,7 +1095,7 @@ var SECTIONS = [
   prayer:"Father, cover the people I love. Heal what has been wounded, strengthen what is good, and teach us how to love one another with truth and grace. Let our home become a place of peace, safety, forgiveness, and faith. Amen."},
  {id:"health", no:"05", name:"Healing, Strength & Wholeness", cut:"princess",
   intro:"God knows every place that hurts, every fear you have carried, and every part of you that needs His restoring touch.",
-  ref:"Psalm 103:2–3", verse:"Bless the LORD, O my soul, and forget not all his benefits: who forgiveth all thine iniquities; who healeth all thy diseases.",
+  ref:"Psalm 103:2–3", verse:"Let all that I am praise the Lord; may I never forget the good things he does for me. He forgives all my sins and heals all my diseases.", tr:"NLT",
   refs:"Psalm 103:2–5 · Isaiah 40:29–31 · Exodus 15:26 · Matthew 11:28–30 · James 5:15–16",
   decl:["God is my healer, my strength, and my sustainer.",
    "I speak life, restoration, strength, and wholeness over my body and mind.",
@@ -1118,7 +1119,7 @@ var SECTIONS = [
   prayer:"Jehovah Jireh, You are my provider. Give me wisdom for every decision, favor for the right opportunities, discipline to steward well, and peace while I wait. Bless the work of my hands and provide what is needed for this season. Amen."},
  {id:"calling", no:"07", name:"Work, Calling & Creativity", cut:"emerald",
   intro:"Purpose is not limited to a title, platform, or paycheck. What God placed in you still matters in this season.",
-  ref:"Colossians 3:23", verse:"And whatsoever ye do, do it heartily, as to the Lord, and not unto men.",
+  ref:"Colossians 3:23", verse:"Work willingly at whatever you do, as though you were working for the Lord rather than for people.", tr:"NLT",
   refs:"Colossians 3:23–24 · Ephesians 2:10 · Exodus 35:31–32 · Psalm 90:17 · Galatians 6:9",
   decl:["The loss of one opportunity did not erase the gifts God placed inside me.",
    "My calling is not measured by applause, speed, visibility, or comparison.",
@@ -1130,7 +1131,7 @@ var SECTIONS = [
   prayer:"God, breathe on the gifts You placed within me. Give me fresh ideas, focused effort, honest opportunities, and the courage to begin again. Establish the work of my hands and let it serve people well. Amen."},
  {id:"protection", no:"08", name:"Protection, Home & Holy Spirit", cut:"asscher",
   intro:"Invite God’s presence into your home, your decisions, your coming and going, and every place fear has tried to settle.",
-  ref:"Psalm 46:1", verse:"God is our refuge and strength, a very present help in trouble.",
+  ref:"Psalm 46:1", verse:"God is our refuge and strength, always ready to help in times of trouble.", tr:"NLT",
   refs:"Psalm 46:1 · Psalm 91:1–2 · Psalm 121:7–8 · 2 Timothy 1:7 · John 14:27",
   decl:["God is my refuge, fortress, and defender. I am not abandoned in trouble.",
    "I ask for God’s protection over my home, my loved ones, my decisions, and every place I go.",
@@ -1142,7 +1143,7 @@ var SECTIONS = [
   prayer:"Lord, be our refuge. Cover the people and places entrusted to us. Give us discernment, wisdom, courage, and peace. Let this home become a place where Your presence is welcomed and fear does not rule. Amen."},
  {id:"perseverance", no:"09", name:"Perseverance Through Setbacks & Change", cut:"trillion",
   intro:"A setback is real, but it is not the whole story. Rebuilding can be slow, and every faithful step still matters.",
-  ref:"Isaiah 43:19", verse:"Behold, I will do a new thing; now it shall spring forth; shall ye not know it? I will even make a way in the wilderness, and rivers in the desert.",
+  ref:"Isaiah 43:19", verse:"For I am about to do something new. See, I have already begun! Do you not see it? I will make a pathway through the wilderness. I will create rivers in the dry wasteland.", tr:"NLT",
   refs:"Isaiah 43:18–19 · Galatians 6:9 · Romans 5:3–5 · Micah 7:8 · Hebrews 12:1–2",
   decl:["I can begin again without having every detail figured out.",
    "A slow season is not a wasted season. God can strengthen me as I keep showing up.",
@@ -1154,7 +1155,7 @@ var SECTIONS = [
   prayer:"God of new beginnings, meet me in the middle of this process. Renew my strength, help me release what I cannot change, and show me the next step I can take. I will not quit in the middle of my making. Amen."},
  {id:"legacy", no:"10", name:"Legacy, Generosity & Impact", cut:"oval",
   intro:"Legacy grows through the way you love, serve, forgive, create, give, and keep believing. It can begin in ordinary choices today.",
-  ref:"Psalm 78:4", verse:"We will not hide them from their children, shewing to the generation to come the praises of the LORD, and his strength, and his wonderful works that he hath done.",
+  ref:"Psalm 78:4", verse:"We will not hide these truths from our children; we will tell the next generation about the glorious deeds of the Lord, about his power and his mighty wonders.", tr:"NLT",
   refs:"Psalm 78:4 · Proverbs 13:22 · Matthew 5:16 · 2 Corinthians 9:11 · 1 Peter 4:10",
   decl:["I will leave a legacy of faith, compassion, courage, integrity, and generosity.",
    "My life can inspire goodness in ways I may never fully see.",
@@ -1481,37 +1482,37 @@ function research(){
 
 /* ---------- Welcome back ---------- */
 var VERSES=[
- ["It is of the LORD’s mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.","Lamentations 3:22–23"],
- ["Behold, I will do a new thing; now it shall spring forth; shall ye not know it?","Isaiah 43:19"],
- ["Being confident of this very thing, that he which hath begun a good work in you will perform it until the day of Jesus Christ.","Philippians 1:6"],
- ["God is our refuge and strength, a very present help in trouble.","Psalm 46:1"],
- ["Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee.","Isaiah 41:10"],
- ["Be strong and of a good courage; be not afraid, neither be thou dismayed: for the LORD thy God is with thee whithersoever thou goest.","Joshua 1:9"],
- ["Weeping may endure for a night, but joy cometh in the morning.","Psalm 30:5"],
- ["Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.","Proverbs 3:5–6"],
- ["And we know that all things work together for good to them that love God, to them who are the called according to his purpose.","Romans 8:28"],
- ["For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.","Jeremiah 29:11"],
- ["The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.","Psalm 34:18"],
- ["Come unto me, all ye that labour and are heavy laden, and I will give you rest.","Matthew 11:28"],
- ["My grace is sufficient for thee: for my strength is made perfect in weakness.","2 Corinthians 12:9"],
- ["But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles.","Isaiah 40:31"],
- ["And let us not be weary in well doing: for in due season we shall reap, if we faint not.","Galatians 6:9"],
- ["The LORD is my shepherd; I shall not want.","Psalm 23:1"],
- ["And I will restore to you the years that the locust hath eaten.","Joel 2:25"],
- ["They that sow in tears shall reap in joy.","Psalm 126:5"],
+ ["The faithful love of the Lord never ends! His mercies never cease. Great is his faithfulness; his mercies begin afresh each morning.","Lamentations 3:22–23","NLT"],
+ ["For I am about to do something new. See, I have already begun! Do you not see it?","Isaiah 43:19","NLT"],
+ ["And I am certain that God, who began the good work within you, will continue his work until it is finally finished on the day when Christ Jesus returns.","Philippians 1:6","NLT"],
+ ["God is our refuge and strength, always ready to help in times of trouble.","Psalm 46:1","NLT"],
+ ["Don’t be afraid, for I am with you. Don’t be discouraged, for I am your God. I will strengthen you and help you.","Isaiah 41:10","NLT"],
+ ["This is my command—be strong and courageous! Do not be afraid or discouraged. For the Lord your God is with you wherever you go.","Joshua 1:9","NLT"],
+ ["Weeping may last through the night, but joy comes with the morning.","Psalm 30:5","NLT"],
+ ["Trust in the Lord with all your heart; do not depend on your own understanding. Seek his will in all you do, and he will show you which path to take.","Proverbs 3:5–6","NLT"],
+ ["And we know that God causes everything to work together for the good of those who love God and are called according to his purpose for them.","Romans 8:28","NLT"],
+ ["‘For I know the plans I have for you,’ says the Lord. ‘They are plans for good and not for disaster, to give you a future and a hope.’","Jeremiah 29:11","NLT"],
+ ["The Lord is close to the brokenhearted; he rescues those whose spirits are crushed.","Psalm 34:18","NLT"],
+ ["Come to me, all of you who are weary and carry heavy burdens, and I will give you rest.","Matthew 11:28","NLT"],
+ ["My grace is all you need. My power works best in weakness.","2 Corinthians 12:9","NLT"],
+ ["But those who trust in the Lord will find new strength. They will soar high on wings like eagles.","Isaiah 40:31","NLT"],
+ ["So let’s not get tired of doing what is good. At just the right time we will reap a harvest of blessing if we don’t give up.","Galatians 6:9","NLT"],
+ ["The Lord is my shepherd; I have all that I need.","Psalm 23:1","NLT"],
+ ["I will give you back what you lost to the swarming locusts, the hopping locusts, the stripping locusts, and the cutting locusts.","Joel 2:25","NLT"],
+ ["Those who plant in tears will harvest with shouts of joy.","Psalm 126:5","NLT"],
  ["I can do all things through Christ which strengtheneth me.","Philippians 4:13"],
- ["When I fall, I shall arise; when I sit in darkness, the LORD shall be a light unto me.","Micah 7:8"],
- ["He healeth the broken in heart, and bindeth up their wounds.","Psalm 147:3"],
- ["Now faith is the substance of things hoped for, the evidence of things not seen.","Hebrews 11:1"],
- ["And blessed is she that believed: for there shall be a performance of those things which were told her from the Lord.","Luke 1:45"],
- ["For we are his workmanship, created in Christ Jesus unto good works.","Ephesians 2:10"],
- ["The LORD, he it is that doth go before thee; he will be with thee, he will not fail thee, neither forsake thee.","Deuteronomy 31:8"],
- ["The LORD thy God in the midst of thee is mighty; he will save, he will rejoice over thee with joy.","Zephaniah 3:17"],
- ["Delight thyself also in the LORD: and he shall give thee the desires of thine heart.","Psalm 37:4"],
- ["Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.","Isaiah 26:3"],
- ["Now the God of hope fill you with all joy and peace in believing, that ye may abound in hope.","Romans 15:13"],
+ ["For though I fall, I will rise again. Though I sit in darkness, the Lord will be my light.","Micah 7:8","NLT"],
+ ["He heals the brokenhearted and bandages their wounds.","Psalm 147:3","NLT"],
+ ["Faith shows the reality of what we hope for; it is the evidence of things we cannot see.","Hebrews 11:1","NLT"],
+ ["You are blessed because you believed that the Lord would do what he said.","Luke 1:45","NLT"],
+ ["For we are God’s masterpiece. He has created us anew in Christ Jesus, so we can do the good things he planned for us long ago.","Ephesians 2:10","NLT"],
+ ["Do not be afraid or discouraged, for the Lord will personally go ahead of you. He will be with you; he will neither fail you nor abandon you.","Deuteronomy 31:8","NLT"],
+ ["For the Lord your God is living among you. He is a mighty savior. He will take delight in you with gladness.","Zephaniah 3:17","NLT"],
+ ["Take delight in the Lord, and he will give you your heart’s desires.","Psalm 37:4","NLT"],
+ ["You will keep in perfect peace all who trust in you, all whose thoughts are fixed on you!","Isaiah 26:3","NLT"],
+ ["I pray that God, the source of hope, will fill you completely with joy and peace because you trust in him. Then you will overflow with confident hope through the power of the Holy Spirit.","Romans 15:13","NLT"],
  ["For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.","2 Timothy 1:7"],
- ["The LORD bless thee, and keep thee: the LORD make his face shine upon thee, and be gracious unto thee.","Numbers 6:24–25"]
+ ["May the Lord bless you and protect you. May the Lord smile on you and be gracious to you.","Numbers 6:24–25","NLT"]
 ];
 function verseToday(){ var d=new Date(), doy=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5); return VERSES[doy%VERSES.length]; }
 function backPage(){
@@ -1525,7 +1526,7 @@ function backPage(){
     '<div class="bp-rule" aria-hidden="true"></div>'+
     '<span class="tlabel">Your word for today</span>'+
     '<p class="bp-verse">'+esc(v[0])+'</p>'+
-    '<span class="ref">'+esc(v[1])+'<small>KJV</small></span>'+
+    '<span class="ref">'+esc(v[1])+'<small>'+(v[2]||'KJV')+'</small></span>'+
     '<div class="bp-prog"><div>'+SECTIONS.map(function(x){return '<span class="'+(state.found[x.id]?'lit':'')+'">'+gem(x.cut)+'</span>';}).join("")+'</div><small>'+nf+' of 10 diamonds found</small></div>'+
     '<div class="bp-btns"><button class="btn" type="button" data-sec="'+next.id+'">'+(state.lastSec?'Pick up where you left off':'Find your next diamond')+'</button>'+
       '<span class="bp-next">'+esc(next.name)+'</span>'+
@@ -1654,7 +1655,7 @@ function todaysWord(){
   return {s:sec,i:(seed*7+3)%7};
 }
 function greeting(){ var h=new Date().getHours(); return h<12?"Good morning":(h<17?"Good afternoon":"Good evening"); }
-function creditHTML(){ return '<p class="home-credit">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b><br><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a></p>'; }
+function creditHTML(){ return '<p class="home-credit">App created with <span class="hrt" aria-label="love">♥</span> by <b>FutureWorks</b><br><a href="https://gofutureworks.com/custom-app" target="_blank" rel="noopener">Want your own custom app? Apply here →</a><span class="nlt-credit">Scripture quotations marked NLT are taken from the Holy Bible, New Living Translation, copyright © 1996, 2004, 2015 by Tyndale House Foundation. Used by permission of Tyndale House Publishers, Carol Stream, Illinois 60188. All rights reserved.</span></p>'; }
 function welcome(){
   var tw=todaysWord(), showIns=!isStandalone()&&!state.installSeen;
   app.innerHTML='<section class="screen">'+
@@ -1709,7 +1710,7 @@ function section(id){
    '<article class="page">'+
      '<div class="scripture"><span class="label">Scripture</span>'+
        '<p class="verse">'+esc(s.verse)+'</p>'+
-       '<span class="ref">'+esc(s.ref)+'<small>KJV</small></span></div>'+
+       '<span class="ref">'+esc(s.ref)+'<small>'+(s.tr||'KJV')+'</small></span></div>'+
      listenHTML('Declarations and prayer')+
      '<div class="dsec"><span class="label">Declarations</span><p class="hint-line">'+(state.name?nm()+', speak':'Speak')+' each one slowly and aloud.</p>'+
        '<div class="dcard" id="dcard" aria-live="polite"></div>'+
